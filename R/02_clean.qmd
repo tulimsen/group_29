@@ -1,0 +1,167 @@
+---
+title: "clean"
+format: html
+editor: visual
+---
+
+## Loading necessary libraries
+
+```{r}
+install.packages("tidyverse")
+```
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(stringr)
+library(tidyr)
+```
+
+## Initial exploration
+
+```{r}
+head(ASCO)
+summary(ASCO)
+unique(ASCO$Type)
+unique(ASCO$Consequences)
+unique(ASCO$Impact)
+```
+
+```{r}
+head(SCC)
+summary(SCC)
+unique(SCC$Type)
+unique(SCC$Consequences)
+unique(SCC$Impact)
+```
+
+The 'Impact' columns seems to contain combined scores and annotations for different methods: 'VEP', 'SIFT' and 'PolyPhen'. The data would be more understandable and actionable if it was split into distinct columns for each of these annotations and scores:
+
+Extract VEP, SIFT, and PolyPhen annotations directly from the Impact column using regex:
+
+```{r}
+# For ASCO
+ASCO_clean <- ASCO %>%
+  mutate(
+    VEP = str_extract(Impact, "VEP: (\\w+)"),
+    SIFT_temp = str_extract(Impact, "SIFT: (\\w+ - score \\d*\\.?\\d+)"),
+    PolyPhen_temp = str_extract(Impact, "PolyPhen: (\\w+ - score \\d*\\.?\\d+)")
+  )
+
+# For SCC
+SCC_clean <- SCC %>%
+  mutate(
+    VEP = str_extract(Impact, "VEP: (\\w+)"),
+    SIFT_temp = str_extract(Impact, "SIFT: (\\w+ - score \\d*\\.?\\d+)"),
+    PolyPhen_temp = str_extract(Impact, "PolyPhen: (\\w+ - score \\d*\\.?\\d+)")
+  )
+```
+
+Separate and clean the extracted values:
+
+```{r}
+# For ASCO
+ASCO_clean <- ASCO_clean %>%
+  separate(SIFT_temp, into = c("SIFT_Annotation", "SIFT_Score"), sep = " - score ", fill = "right") %>%
+  separate(PolyPhen_temp, into = c("PolyPhen_Annotation", "PolyPhen_Score"), sep = " - score ", fill = "right") %>%
+  mutate(
+    VEP = str_replace(VEP, "VEP: ", ""),
+    SIFT_Annotation = str_replace(SIFT_Annotation, "SIFT: ", ""),
+    PolyPhen_Annotation = str_replace(PolyPhen_Annotation, "PolyPhen: ", ""),
+    SIFT_Score = as.numeric(SIFT_Score),
+    PolyPhen_Score = as.numeric(PolyPhen_Score)
+  )
+
+# For SCC
+SCC_clean <- SCC_clean %>%
+  separate(SIFT_temp, into = c("SIFT_Annotation", "SIFT_Score"), sep = " - score ", fill = "right") %>%
+  separate(PolyPhen_temp, into = c("PolyPhen_Annotation", "PolyPhen_Score"), sep = " - score ", fill = "right") %>%
+  mutate(
+    VEP = str_replace(VEP, "VEP: ", ""),
+    SIFT_Annotation = str_replace(SIFT_Annotation, "SIFT: ", ""),
+    PolyPhen_Annotation = str_replace(PolyPhen_Annotation, "PolyPhen: ", ""),
+    SIFT_Score = as.numeric(SIFT_Score),
+    PolyPhen_Score = as.numeric(PolyPhen_Score)
+  )
+```
+
+## 
+
+The columns ASCO\$\`# Affected Cases in Cohort\` and ASCO\$\`# Affected Cases Across the GDC\` consist of a count and a percentage.
+
+```{r}
+# For ASCO
+ASCO_clean <- ASCO_clean %>%
+  # Separate the `# Affected Cases in Cohort` column
+  separate(`# Affected Cases in Cohort`, 
+           into = c("Affected_Cohort", "Percentage_Cohort"), 
+           sep = ",") %>%
+  # Separate the numbers in `Affected_Cohort` column
+  separate(Affected_Cohort, 
+           into = c("Affected_Num_Cohort", "Total_Num_Cohort"), 
+           sep = " / ") %>%
+  # Separate the `# Affected Cases Across the GDC` column
+  separate(`# Affected Cases Across the GDC`, 
+           into = c("Affected_GDC", "Total_GDC"), 
+           sep = " / ") %>%
+  # Convert Percentage_Cohort into numeric (by removing the '%' and converting)
+  mutate(Percentage_Cohort = as.numeric(str_remove(Percentage_Cohort, "%"))/100,
+         Affected_Num_Cohort = as.numeric(Affected_Num_Cohort),
+         Total_Num_Cohort = as.numeric(Total_Num_Cohort),
+         Affected_GDC = as.numeric(Affected_GDC),
+         Total_GDC = as.numeric(Total_GDC))
+
+# For SCC
+SCC_clean <- SCC_clean %>%
+  # Separate the `# Affected Cases in Cohort` column
+  separate(`# Affected Cases in Cohort`, 
+           into = c("Affected_Cohort", "Percentage_Cohort"), 
+           sep = ",") %>%
+  # Separate the numbers in `Affected_Cohort` column
+  separate(Affected_Cohort, 
+           into = c("Affected_Num_Cohort", "Total_Num_Cohort"), 
+           sep = " / ") %>%
+  # Separate the `# Affected Cases Across the GDC` column
+  separate(`# Affected Cases Across the GDC`, 
+           into = c("Affected_GDC", "Total_GDC"), 
+           sep = " / ") %>%
+  # Convert Percentage_Cohort into numeric (by removing the '%' and converting)
+  mutate(Percentage_Cohort = as.numeric(str_remove(Percentage_Cohort, "%"))/100,
+         Affected_Num_Cohort = as.numeric(Affected_Num_Cohort),
+         Total_Num_Cohort = as.numeric(Total_Num_Cohort),
+         Affected_GDC = as.numeric(Affected_GDC),
+         Total_GDC = as.numeric(Total_GDC))
+```
+
+## Missing values
+
+```{r}
+# For ASCO
+colSums(is.na(ASCO_clean))
+
+# For SCC
+colSums(is.na(SCC_clean))
+```
+
+```{r}
+# For ASCO
+ASCO_clean[!complete.cases(ASCO_clean),]
+
+# For SCC
+SCC_clean[!complete.cases(SCC_clean),]
+```
+
+## Handling duplicates
+
+```{r}
+# Remove duplicate rows if they exist
+ASCO_clean <- ASCO_clean %>% distinct()
+SCC_clean <- SCC_clean %>% distinct()
+```
+
+## Saving cleaned data
+
+```{r}
+write.csv(ASCO_clean, "~/project29_git/_raw/data/02_clean_ASCO.tsv", row.names = FALSE)
+write.csv(SCC_clean, "~/project29_git/_raw/data/02_clean_SCC.tsv", row.names = FALSE)
+```
