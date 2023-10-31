@@ -4,4 +4,29 @@ format: html
 editor: visual
 ---
 
-## Quarto
+## Loading necessary packages
+
+```{r}
+instal.packages("ggplot2")
+library(ggplot2)
+```
+
+## Describing the data
+
+Summary of basic statistics for ASCO, SCC and metaData:
+
+```{r}
+summary(ASCO_clean)
+summary(SCC_clean)
+summary(metaData)
+```
+
+## Visualization of the distribution for SIFT and PolyPhen scores
+
+```{r}
+# Histogram for SIFT scores
+ggplot(ASCO_clean, aes(x=SIFT_Score)) + geom_histogram()
+
+# Histogram for PolyPhen scores
+ggplot(ASCO_clean, aes(x=PolyPhen_Score)) + geom_histogram()
+```

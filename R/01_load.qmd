@@ -24,3 +24,9 @@ Loading the squamous_cell_carcinoma file
 ```{r}
 SCC <- read_tsv("~/project29_git/_raw/frequent-mutations.squamous_cell_carcinoma.tsv")
 ```
+
+Loading the meta data
+
+```{r}
+metaData <- read_tsv("~/project29_git/_raw/survival-plot1.tsv")
+```

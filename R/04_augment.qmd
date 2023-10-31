@@ -47,9 +47,53 @@ SCC_clean <- SCC_clean %>%
   mutate(Category = map_chr(Consequences, categorize_consequences))
 ```
 
+## Count mutations and visualize
+
+By type:
+
+```{r}
+ASCO_clean %>% count(Type)
+SCC_clean %>% count(Type)
+```
+
+```{r}
+ASCO_clean %>%
+  group_by(Type) %>%
+  summarize(count = n()) %>%
+  ggplot(aes(x=Type, y=count)) + 
+  geom_bar(stat='identity')
+
+SCC_clean %>%
+  group_by(Type) %>%
+  summarize(count = n()) %>%
+  ggplot(aes(x=Type, y=count)) + 
+  geom_bar(stat='identity')
+```
+
+By category:
+
+```{r}
+ASCO_clean %>% count(Category)
+SCC_clean %>% count(Category)
+```
+
+```{r}
+ASCO_clean %>%
+  group_by(Category) %>%
+  summarize(count = n()) %>%
+  ggplot(aes(x=Category, y=count)) + 
+  geom_bar(stat='identity')
+
+SCC_clean %>%
+  group_by(Category) %>%
+  summarize(count = n()) %>%
+  ggplot(aes(x=Category, y=count)) + 
+  geom_bar(stat='identity')
+```
+
 ## Saving data
 
 ```{r}
-write.csv(ASCO_clean, "~/project29_git/_raw/data/02_aug_ASCO.tsv", row.names = FALSE)
-write.csv(SCC_clean, "~/project29_git/_raw/data/02_aug_SCC.tsv", row.names = FALSE)
+write.csv(ASCO_clean, "~/project29_git/_raw/data/04_aug_ASCO.tsv", row.names = FALSE)
+write.csv(SCC_clean, "~/project29_git/_raw/data/04_aug_SCC.tsv", row.names = FALSE)
 ```
