@@ -1,0 +1,43 @@
+---
+title: "Description of $Impact"
+format: html
+editor: visual
+---
+
+## VEP, SIFT and PolyPhen
+
+1.  **VEP (Variant Effect Predictor)**
+
+    -   **Purpose**: VEP is a tool developed by the Ensembl project to annotate and predict the effects of genetic variants on genes, transcripts, and protein sequences, as well as regulatory regions.
+
+    -   **Features**:
+
+        -   Provides information about where the variant is located (e.g., intron, exon, upstream/downstream of a gene).
+
+        -   Predicts consequences of the variant on the protein (e.g., missense, frameshift, stop-gain).
+
+        -   Offers additional information like associated co-located variants, SIFT/PolyPhen scores, and known phenotypes.
+
+2.  **SIFT (Sorting Intolerant From Tolerant)**
+
+    -   **Purpose**: SIFT is an algorithm that predicts whether an amino acid substitution will affect protein function based on sequence homology and the physical properties of amino acids.
+
+    -   **Features**:
+
+        -   Analyzes the degree of conservation of amino acid residues in sequence alignments derived from closely related sequences to make its predictions.
+
+        -   Scores range from 0 to 1. Amino acid substitutions with scores ≤ 0.05 are predicted to be deleterious or damaging, while those with scores \> 0.05 are predicted to be tolerated.
+
+3.  **PolyPhen (Polymorphism Phenotyping)**
+
+    -   **Purpose**: PolyPhen is another tool that predicts the potential impact of an amino acid substitution on the structure and function of a human protein.
+
+    -   **Features**:
+
+        -   Uses multiple information sources, including sequence-based and structure-based features, to make its predictions.
+
+        -   Provides scores that classify variants as "benign," "possibly damaging," or "probably damaging."
+
+        -   The PolyPhen score is a continuous value between 0 and 1, where higher scores indicate higher confidence in the predicted damaging effect of the variant.
+
+All three tools play crucial roles in genomic research, especially in studies focusing on the functional implications of genetic mutations. They help researchers and clinicians understand the potential significance of the variants they discover, which can be critical for both basic research and clinical applications, such as in the realm of precision medicine.

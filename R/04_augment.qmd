@@ -1,0 +1,55 @@
+---
+title: "04_augment"
+format: html
+editor: visual
+---
+
+## Loading packages
+
+```{r}
+library(tidyverse)
+```
+
+## Creating a function to categorizing the consequence column
+
+```{r}
+# Define the function
+categorize_consequences <- function(consequence) {
+  if (grepl("^Missense", consequence)) {
+    return("Missense")
+  } else if (grepl("^Frameshift", consequence)) {
+    return("Frameshift")
+  } else if (grepl("^Inframe Deletion", consequence)) {
+    return("Inframe Deletion")
+  } else if (grepl("^Stop Gained", consequence)) {
+    return("Stop Gained")
+  } else if (grepl("^Splice", consequence)) {
+    return("Splice")
+  } else if (grepl("^Inframe Insertion", consequence)) {
+    return("Inframe Insertion")
+  } else if (grepl("^Synonymous", consequence)) {
+    return("Synonymous")
+  } else if (grepl("^Start Lost", consequence)) {
+    return("Start Lost")
+  } else {
+    return("Other")
+  }
+}
+
+# Apply the function using mutate and map_chr from the tidyverse
+
+# For ASCO
+ASCO_clean <- ASCO_clean %>%
+  mutate(Category = map_chr(Consequences, categorize_consequences))
+
+# For SCC
+SCC_clean <- SCC_clean %>%
+  mutate(Category = map_chr(Consequences, categorize_consequences))
+```
+
+## Saving data
+
+```{r}
+write.csv(ASCO_clean, "~/project29_git/_raw/data/02_aug_ASCO.tsv", row.names = FALSE)
+write.csv(SCC_clean, "~/project29_git/_raw/data/02_aug_SCC.tsv", row.names = FALSE)
+```
