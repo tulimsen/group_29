@@ -35,6 +35,8 @@ unique(SCC$Consequences)
 unique(SCC$Impact)
 ```
 
+## Dividing '\$Impact' column in each of the three methods
+
 The 'Impact' columns seems to contain combined scores and annotations for different methods: 'VEP', 'SIFT' and 'PolyPhen'. The data would be more understandable and actionable if it was split into distinct columns for each of these annotations and scores:
 
 Extract VEP, SIFT, and PolyPhen annotations directly from the Impact column using regex:
