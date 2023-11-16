@@ -1,0 +1,198 @@
+---
+title: "03_describe"
+format: html
+editor: visual
+---
+
+## Loading necessary packages
+
+```{r}
+install.packages("ggplot2")
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(purrr)
+library(gridExtra)
+library(reshape2)
+```
+
+## Loading the data
+
+```{r}
+TCGA_aug <- read_tsv("~/project29_git/data/03_dat_aug.tsv", show_col_types = FALSE)
+```
+
+## Describing the data
+
+Summary of basic statistics for TCGA_aug (compare them to TCGA_clean to check for integrity after imputation/augmentation).
+
+```{r}
+# Summary statistics for numeric variables
+# Function to calculate detailed summary for each numeric column
+summary_numeric <- function(df) {
+  numeric_vars <- names(select(df, where(is.numeric))) # Get names of numeric variables
+  map_dfr(numeric_vars, function(var) {
+    summary_df <- df %>%
+      summarise(
+        Variable = var,
+        Min = min(.[[var]], na.rm = TRUE),
+        `1st Qu` = quantile(.[[var]], probs = 0.25, na.rm = TRUE),
+        Median = median(.[[var]], na.rm = TRUE),
+        Mean = mean(.[[var]], na.rm = TRUE),
+        `3rd Qu` = quantile(.[[var]], probs = 0.75, na.rm = TRUE),
+        Max = max(.[[var]], na.rm = TRUE),
+        SD = sd(.[[var]], na.rm = TRUE)
+      )
+    return(summary_df)
+  })
+}
+
+# Apply the function to TCGA_aug
+numeric_summary <- summary_numeric(TCGA_aug)
+
+
+# Summary statistics for categorial values
+# Function to generate a detailed summary for each categorical variable
+summary_categorical <- function(df) {
+  # Get names of categorical variables
+  categorical_vars <- names(select(df, where(is.character)))
+  
+  # Function to summarize a single categorical variable
+  summarize_variable <- function(var_name) {
+    var_table <- df %>%
+      count(!!sym(var_name)) %>%
+      mutate(Percentage = n / sum(n) * 100) %>%
+      rename(Level = !!sym(var_name))
+
+    # Add variable name as a column for identification
+    var_table$Variable <- var_name
+    return(var_table)
+  }
+  
+  # Apply the summarizing function to each categorical variable and combine the results
+  map_dfr(categorical_vars, summarize_variable)
+}
+
+# Apply the function to TCGA_aug
+categorical_summary <- summary_categorical(TCGA_aug[,-1]) # without the sampleID's
+```
+
+## Visualization of numerical data
+
+```{r}
+
+num_list <- list()
+# Loop through numeric variables and create plots
+numeric_vars <- TCGA_aug[,-10] %>% select(where(is.numeric))
+
+for (var in names(numeric_vars)) {
+  num_list[[var]] <-
+      ggplot(numeric_vars, aes_string(x = var)) +
+      geom_histogram(bins = 30, fill = "skyblue", color = "black") +
+      labs(title = paste("Histogram of", var), x = var, y = "Frequency") +
+      theme_gray(base_size = 9)
+
+  #num_list[[var]] <-
+     # ggplot(numeric_vars, aes_string(x = var)) +
+     # geom_boxplot(fill = "lightgreen", color = "black") +
+      #labs(title = paste("Boxplot of", var), x = var, y = "Value") +
+      #theme_gray(base_size = 9)
+
+}
+
+# Display plots in a grid
+do.call(grid.arrange, c(num_list[c(1,14,15,3)], ncol = 2))
+```
+
+```{r}
+# Create a grouped boxplot of age at diagnosis vs cancer type
+ggplot(TCGA_aug, aes(x = cancer_type, y = age_diagnosis, fill = cancer_type)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(title = "Age at diagnosis across cancer types", x = "Cancer Type", y = "Age at Diagnosis") +
+  theme_gray() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+
+# Create a grouped boxplot of disease duration vs cancer type
+ggplot(TCGA_aug, aes(x = cancer_type, y = disease_duration_years, fill = cancer_type)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(title = "Disease duration across cancer types", x = "Cancer type", y = "Disease duration in years") +
+  theme_gray() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+```
+
+## Visualization of categorical data
+
+```{r}
+# List to store plots
+cat_list <- list()
+
+# Loop through categorical variables and create bar plots
+categorical_vars <- TCGA_aug[,-1] %>% select(where(is.character))
+
+for (var in names(categorical_vars)) {
+  cat_list[[var]] <-
+      ggplot(categorical_vars, aes_string(x = var)) +
+      geom_bar(fill = "coral", color = "black") +
+      labs(title = paste("Bar Plot of", var), x = var, y = "Count") +
+      theme_gray(base_size = 9) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+}
+
+# Display plots in a grid
+do.call(grid.arrange, c(cat_list[c(1,2,9,15,16)], ncol = 2))
+
+print(cat_list$race)
+```
+
+```{r}
+# Create a grouped bar plot for Gender vs. Cancer Type
+ggplot(TCGA_aug, aes(x = cancer_type, fill = gender)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Distribution of Cancer Types by Gender", x = "Cancer Type", y = "Count") +
+  theme_gray(base_size = 9) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+
+# Create a grouped bar plot for Pathologic Stage vs. Cancer Type
+ggplot(TCGA_aug, aes(x = cancer_type, fill = pathologic_stage_group)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Distribution of Cancer Types by Pathologic Stage", x = "Cancer Type", y = "Count") +
+  theme_gray(base_size = 9) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+```
+
+## Outliers
+
+```{r}
+# Create box plots for numerical variables
+numerical_vars <- c("age_diagnosis", "death_days_to", "age_at_last_followup_years", "disease_duration_years")
+
+# Create a list of box plots for each numerical variable
+boxplots <- lapply(numerical_vars, function(var) {
+  ggplot(TCGA_aug, aes(y = !!sym(var))) +
+    geom_boxplot(outlier.colour = "red", outlier.shape = 16, width = 0.5, notch = FALSE) +
+    labs(title = paste("Box Plot of", var), y = var) +
+    theme_gray(base_size = 9) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+})
+
+# Display the box plots in a grid
+grid.arrange(grobs = boxplots, ncol = 2)
+
+```
+
+## Correlation analysis and heatmap
+
+```{r}
+# Calculate correlations for numerical variables
+correlations <- cor(select(TCGA_aug, all_of(numerical_vars)))
+
+# Create a heatmap of correlations
+cor_melted <- melt(correlations)
+ggplot(cor_melted, aes(Var1, Var2, fill = value)) +
+  geom_tile() +
+  labs(title = "Correlation Heatmap", x = "", y = "") +
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +
+  theme_gray() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```

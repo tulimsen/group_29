@@ -1,0 +1,21 @@
+---
+title: "01_load"
+format: html
+editor: visual
+---
+
+## Importing packages
+
+```{r}
+install.packages("readxl")
+
+```
+
+## Loading data
+
+Loading the detailed Information about TCGA-CDR and Analysis Results
+
+```{r}
+library(readxl)
+TCGA <- read_excel("_raw/mmc1 (1).xlsx")
+```

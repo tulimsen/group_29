@@ -4,4 +4,75 @@ format: html
 editor: visual
 ---
 
-## COX regression?
+## Loading packages
+
+```{r}
+library(survival)
+library(broom)
+library(forestplot)
+library(survminer)
+```
+
+## Loading the data
+
+```{r}
+TCGA_aug <- read_tsv("~/project29_git/data/03_dat_aug.tsv", show_col_types = FALSE)
+```
+
+## **Create the Survival Object**
+
+First, ensure that the dataset (**`TCGA_aug`**) has the necessary variables for survival analysis. Typically, we need:
+
+-   A time-to-event variable: This could be the **`OS.time`** or **`DSS.time`** in the dataset, representing the time until the event (death) occurs.
+
+-   An event indicator: This could be the **`OS`** or **`DSS`** variable, indicating whether the event (death) has occurred (1) or not (0/censored).
+
+Create a **`Surv`** object, which is a special type of object used by the survival package:
+
+```{r}
+# OS.time is the time variable and OS is the event indicator
+surv_obj <- Surv(time = TCGA_aug$OS.time, event = TCGA_aug$OS)
+```
+
+## **Fit the cox proportional hazards model**
+
+Fit the model using the **`coxph`** function. Select predictors based on the understanding of the data and previous analyses.
+
+```{r}
+# Fit a CoxPH model with age at diagnosis and cancer type as predictors
+cox_model <- coxph(surv_obj ~ age_diagnosis + cancer_type + gender + stage_group + race, data = TCGA_aug)
+```
+
+## Model summary
+
+Inspect the model output to understand the impact of predictors:
+
+```{r}
+summary(cox_model)
+```
+
+## **Checking Proportional Hazards Assumption**
+
+The Cox model assumes that the ratio of hazards (risk) is constant over time (proportional hazards). This assumption should be checked:
+
+```{r}
+# Checking Proportional Hazards assumption
+cox.zph(cox_model)
+
+```
+
+## **Visualizing the Results**
+
+Use the **`ggplot2`** package to visualize the results, such as plotting the estimated survival curves:
+
+```{r}
+ggsurvplot(
+  survfit(cox_model), 
+  data = TCGA_aug, 
+  pval = TRUE, 
+  conf.int = TRUE,
+  risk.table = TRUE
+)
+```
+
+## 

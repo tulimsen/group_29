@@ -1,0 +1,153 @@
+---
+title: "clean"
+format: html
+editor: visual
+---
+
+## Loading necessary libraries
+
+```{r}
+install.packages("tidyverse")
+```
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(stringr)
+library(tidyr)
+```
+
+## Initial exploration
+
+```{r}
+# Initial inspection
+glimpse(TCGA)
+```
+
+```{r}
+head(TCGA)
+summary(TCGA)
+colnames(TCGA)
+```
+
+```{r}
+# Remove first column since it is redundant
+TCGA <- TCGA[,-1]
+```
+
+## Missing values
+
+```{r}
+# Check for missing values and gather the number of missing values per column
+missing_values_detailed <- TCGA %>%
+  summarise(across(everything(), ~sum(is.na(.)))) %>%
+  pivot_longer(cols = everything(), names_to = "attribute", values_to = "missing_count") %>%
+  arrange(desc(missing_count))
+
+# View detailed missing values summary
+print(missing_values_detailed)
+```
+
+```{r}
+# Visualize the missing values using a simple plot
+missing_values_detailed %>%
+  filter(missing_count > 0) %>%
+  ggplot(aes(x = reorder(attribute, missing_count), y = missing_count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() + # Flip coordinates for horizontal bar plot
+  labs(x = "Attributes", y = "Number of Missing Values", title = "Missing Values per Attribute") +
+  theme_minimal()
+```
+
+### Special values
+
+In the data values like "\[Not Available\]", "\[Not Applicable\]", and "\[Discrepancy\]" are non-NA values but represent missing information in a practical sense and will be treated like categorical values.
+
+For instance, "\[Not Available\]" could mean that the data was never collected, while "\[Not Applicable\]" could mean the question or data point was not relevant for that particular observation. In such cases, they are not simply 'missing' but convey a distinct meaning that could be important for analysis.
+
+```{r}
+# Convert special strings to factors (if not already) and include special values as levels
+special_values <- c("[Not Available]", "[Not Applicable]", "[Discrepancy]", "[Not Evaluated]", "[Unknown]")
+
+# Apply the transformation and save it as 'TCGA_clean'
+TCGA_clean <- TCGA %>%
+  mutate(across(where(is.character), factor)) %>%
+  mutate(across(where(is.factor), ~fct_expand(.x, special_values)))
+
+```
+
+### Dropping values
+
+Columns like 'residual_tumor' has a very high percentage of missing values, actually all rows in this case are 'NA' - not useful for analysis. If 80 % or more rows in a column are missing we drop them:
+
+```{r}
+# Define a threshold for dropping columns (80% missing values)
+threshold <- 0.8 * nrow(TCGA)
+
+# Drop columns with missing values above the threshold
+cols_to_drop <- missing_values_detailed %>%
+  filter(missing_count > threshold) %>%
+  pull(attribute)
+
+TCGA_clean <- TCGA %>%
+  select(-all_of(cols_to_drop))
+```
+
+### Imputing values
+
+Replacing missing/NULL data with substituted values. When data is missing in a dataset, it can hinder analysis. Therefore, imputations is performed as a preprocessing step to allow for further analysis.
+
+```{r}
+# Impute missing values for numerical columns with median
+TCGA_clean <- TCGA_clean %>%
+  mutate(across(where(is.numeric), ~if_else(is.na(.), median(., na.rm = TRUE), .)))
+
+# Impute missing values for categorical columns with mode
+mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+TCGA_clean <- TCGA_clean %>%
+  mutate(across(where(is.character), ~if_else(is.na(.), mode(.), .)))
+
+
+
+# Check if there are still any missing values
+sum(is.na(TCGA_clean))
+sum(is.na(TCGA))
+```
+
+After cleaning missing values, what is still an issue:
+
+```{r}
+# Get a summary of missing values
+missing_summary <- TCGA_clean %>%
+  summarise(across(everything(), ~sum(is.na(.)))) %>%
+  pivot_longer(cols = everything(), names_to = "column", values_to = "n_missing")
+
+# Check columns with remaining missing values
+missing_summary %>%
+  filter(n_missing > 0)
+
+```
+
+## Renaming columns
+
+```{r}
+# Renaming column names for better understanding
+TCGA_clean <- TCGA_clean %>%
+  rename(
+    sampleID = bcr_patient_barcode,
+    cancer_type = type,
+    age_diagnosis = age_at_initial_pathologic_diagnosis,
+    pathologic_stage = ajcc_pathologic_tumor_stage
+  )
+```
+
+## Saving the cleaned data
+
+```{r}
+# Save the clean data
+write_tsv(TCGA_clean, "~/project29_git/data/02_dat_clean.tsv")
+```
