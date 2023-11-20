@@ -17,5 +17,11 @@ Loading the detailed Information about TCGA-CDR and Analysis Results
 
 ```{r}
 library(readxl)
-TCGA <- read_excel("_raw/mmc1 (1).xlsx")
+
+url <- "https://drive.google.com/uc?export=download&id=1pqlKgEo8foNOx5L_ULJfundKBX4-NNti"
+path <- "../data/_raw/full_dataset.xlsx"
+
+download.file(url = url, destfile = path, mode = "wb")
+
+TCGA <- read_excel(path)
 ```
