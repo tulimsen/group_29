@@ -7,11 +7,16 @@ editor: visual
 ## Loading packages and data
 
 ```{r}
+#| label: 03-01
+#| message: false
+
 library(tidyverse)
 ```
 
 ```{r}
-TCGA_clean <- read_tsv("~/project29_git/data/02_dat_clean.tsv", show_col_types = FALSE)
+#| label: 03-02
+
+TCGA_clean <- read_tsv("../data/02_dat_clean.tsv", show_col_types = FALSE)
 ```
 
 ## 
@@ -19,14 +24,16 @@ TCGA_clean <- read_tsv("~/project29_git/data/02_dat_clean.tsv", show_col_types =
 ## Adding age at last follow-up and disease duration
 
 ```{r}
-TCGA_aug <- TCGA_clean %>%
+#| label: 03-03
+
+TCGA_aug <- TCGA_clean |> 
   mutate(
     # Calculate age at last follow-up in years
     age_at_last_followup_years = (ifelse(vital_status == "Alive", last_contact_days_to, death_days_to) - birth_days_to) / 365.25,
     
     # Calculate disease duration in years including death
     disease_duration_years = (ifelse(vital_status == "Alive", last_contact_days_to / 365.25, death_days_to / 365.25))
-  ) %>%
+  ) |> 
   mutate(
     # Round the calculated durations to two decimal places
     age_at_last_followup_years = round(age_at_last_followup_years, 2),
@@ -38,8 +45,10 @@ TCGA_aug <- TCGA_clean %>%
 ## Adding categorical age groups
 
 ```{r}
+#| label: 03-04
+
 # Create categorical age groups
-TCGA_aug <- TCGA_aug %>%
+TCGA_aug <- TCGA_aug |> 
   mutate(age_group_diagnosis = case_when(
     age_diagnosis < 18 ~ "<18",
     age_diagnosis >= 18 & age_diagnosis < 30 ~ "18-29",
@@ -56,6 +65,8 @@ TCGA_aug <- TCGA_aug %>%
 ## Adding stage groups
 
 ```{r}
+#| label: 03-05
+
 # Create broader groupings for pathologic stages, considering clinical_stage if pathologic_stage is not usable
 # Create a function to map stages
 map_stage <- function(pathologic_stage, clinical_stage) {
@@ -83,12 +94,14 @@ map_stage <- function(pathologic_stage, clinical_stage) {
 }
 
 # Apply the mapping function to create the stage_group variable
-TCGA_aug <- TCGA_aug %>%
+TCGA_aug <- TCGA_aug |> 
   mutate(stage_group = map2_chr(pathologic_stage, clinical_stage, map_stage))
 ```
 
 ## Saving data
 
 ```{r}
-write_tsv(TCGA_aug, "~/project29_git/data/03_dat_aug.tsv")
+#| label: 03-06
+
+write_tsv(TCGA_aug, "../data/03_dat_aug.tsv")
 ```
