@@ -50,4 +50,11 @@ quarto_render("./../R/05_analysis_1.qmd")
 
 file.rename(from = "./../R/05_analysis_1.html",
             to = "./../results/05_analysis_1.html")
+
+
+
+# Presentation
+quarto_render("./../doc/presentation.qmd")
+file.rename(from = "./../doc/presentation.html",
+            to = "./../doc/presentation.html")
 ```
