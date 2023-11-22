@@ -9,6 +9,8 @@ editor: visual
 ## Loading necessary packages
 
 ```{r}
+#| label: 04-01
+#| message: false
 library(ggplot2)
 library(readr)
 library(dplyr)
@@ -20,6 +22,7 @@ library(reshape2)
 ## Loading the data
 
 ```{r}
+#| label: 04-02
 TCGA_aug <- read_tsv("../data/03_dat_aug.tsv", show_col_types = FALSE)
 ```
 
@@ -28,6 +31,8 @@ TCGA_aug <- read_tsv("../data/03_dat_aug.tsv", show_col_types = FALSE)
 Summary of basic statistics for TCGA_aug (compare them to TCGA_clean to check for integrity after imputation/augmentation).
 
 ```{r}
+#| label: 04-03
+
 # Summary statistics for numeric variables
 # Function to calculate detailed summary for each numeric column
 summary_numeric <- function(df) {
@@ -76,54 +81,66 @@ summary_categorical <- function(df) {
 
 # Apply the function to TCGA_aug
 categorical_summary <- summary_categorical(TCGA_aug[,-1]) # without the sampleID's
+
+
+numeric_summary
+categorical_summary
 ```
 
 ## Visualization of numerical data
 
 ```{r}
+#| label: 04-04
 
 num_list <- list()
 # Loop through numeric variables and create plots
 numeric_vars <- TCGA_aug[,-10] %>% select(where(is.numeric))
 
 for (var in names(numeric_vars)) {
-  num_list[[var]] <-
-      ggplot(numeric_vars, aes_string(x = var)) +
-      geom_histogram(bins = 30, fill = "skyblue", color = "black") +
-      labs(title = paste("Histogram of", var), x = var, y = "Frequency") +
-      theme_gray(base_size = 9)
+  plot <-
+    ggplot(numeric_vars, aes_string(x = var)) +
+    geom_histogram(bins = 30, fill = "skyblue", color = "black") +
+    labs(title = paste("Histogram of", var), x = var, y = "Frequency") +
+    theme_gray(base_size = 9)
 
-  #num_list[[var]] <-
-     # ggplot(numeric_vars, aes_string(x = var)) +
-     # geom_boxplot(fill = "lightgreen", color = "black") +
-      #labs(title = paste("Boxplot of", var), x = var, y = "Value") +
-      #theme_gray(base_size = 9)
-
+  # Save the plot to a file in the 'results' folder
+  file_name <- paste0("./../results/04_describe/04_numeric/04_", var, "_histogram.png")
+  ggsave(file_name, plot, width = 8, height = 4)
 }
 
+
 # Display plots in a grid
-do.call(grid.arrange, c(num_list[c(1,14,15,3)], ncol = 2))
+# do.call(grid.arrange, c(num_list[c(1,14,15,3)], ncol = 2))
 ```
 
 ```{r}
-# Create a grouped boxplot of age at diagnosis vs cancer type
-ggplot(TCGA_aug, aes(x = cancer_type, y = age_diagnosis, fill = cancer_type)) +
+#| label: 04-05
+
+# Create and save the grouped boxplot of age at diagnosis vs cancer type
+age_diagnosis_plot <- ggplot(TCGA_aug, aes(x = cancer_type, y = age_diagnosis, fill = cancer_type)) +
   geom_boxplot(show.legend = FALSE) +
   labs(title = "Age at diagnosis across cancer types", x = "Cancer Type", y = "Age at Diagnosis") +
   theme_gray() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
 
-# Create a grouped boxplot of disease duration vs cancer type
-ggplot(TCGA_aug, aes(x = cancer_type, y = disease_duration_years, fill = cancer_type)) +
+ggsave("./../results/04_describe/04_numeric/04_age_diagnosis_boxplot.png", age_diagnosis_plot, width = 10, height = 6)
+
+# Create and save the grouped boxplot of disease duration vs cancer type
+disease_duration_plot <- ggplot(TCGA_aug, aes(x = cancer_type, y = disease_duration_years, fill = cancer_type)) +
   geom_boxplot(show.legend = FALSE) +
-  labs(title = "Disease duration across cancer types", x = "Cancer type", y = "Disease duration in years") +
+  labs(title = "Disease duration across cancer types", x = "Cancer Type", y = "Disease Duration in Years") +
   theme_gray() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+
+ggsave("./../results/04_describe/04_numeric/04_disease_duration_boxplot.png", disease_duration_plot, width = 10, height = 6)
+
 ```
 
 ## Visualization of categorical data
 
 ```{r}
+#| label: 04-06
+
 # List to store plots
 cat_list <- list()
 
@@ -131,69 +148,93 @@ cat_list <- list()
 categorical_vars <- TCGA_aug[,-1] %>% select(where(is.character))
 
 for (var in names(categorical_vars)) {
-  cat_list[[var]] <-
-      ggplot(categorical_vars, aes_string(x = var)) +
-      geom_bar(fill = "coral", color = "black") +
-      labs(title = paste("Bar Plot of", var), x = var, y = "Count") +
-      theme_gray(base_size = 9) +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+  plot <-
+    ggplot(categorical_vars, aes_string(x = var)) +
+    geom_bar(fill = "coral", color = "black") +
+    labs(title = paste("Bar Plot of", var), x = var, y = "Count") +
+    theme_gray(base_size = 9) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+
+  # Save the plot to a file in the 'results' folder
+  file_name <- paste0("./../results/04_describe/04_categorical/04_", var, "_barplot.png")
+  ggsave(file_name, plot, width = 8, height = 4)
 }
 
 # Display plots in a grid
-do.call(grid.arrange, c(cat_list[c(1,2,9,15,16)], ncol = 2))
+# do.call(grid.arrange, c(cat_list[c(1,2,9,15,16)], ncol = 2))
 
-print(cat_list$race)
 ```
 
 ```{r}
+#| label: 04-07
+
 # Create a grouped bar plot for Gender vs. Cancer Type
-ggplot(TCGA_aug, aes(x = cancer_type, fill = gender)) +
+gender_cancerType_plot <- ggplot(TCGA_aug, aes(x = cancer_type, fill = gender)) +
   geom_bar(position = "dodge") +
   labs(title = "Distribution of Cancer Types by Gender", x = "Cancer Type", y = "Count") +
   theme_gray(base_size = 9) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
 
+ggsave("./../results/04_describe/04_categorical/04_gender_cancertype_barplot.png", gender_cancerType_plot, width = 10, height = 6)
+
 # Create a grouped bar plot for Pathologic Stage vs. Cancer Type
-ggplot(TCGA_aug, aes(x = cancer_type, fill = stage_group)) +
+stage_cancerType_plot <- ggplot(TCGA_aug, aes(x = cancer_type, fill = stage_group)) +
   geom_bar(position = "dodge") +
   labs(title = "Distribution of Cancer Types by Pathologic Stage", x = "Cancer Type", y = "Count") +
   theme_gray(base_size = 9) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+
+ggsave("./../results/04_describe/04_categorical/04_stage_cancertype_barplot.png", stage_cancerType_plot, width = 10, height = 6)
 ```
 
 ## Outliers
 
 ```{r}
-# Create box plots for numerical variables
-numerical_vars <- c("age_diagnosis", "death_days_to", "age_at_last_followup_years", "disease_duration_years")
+#| label: 04-08
 
-# Create a list of box plots for each numerical variable
-boxplots <- lapply(numerical_vars, function(var) {
-  ggplot(TCGA_aug, aes(y = !!sym(var))) +
+# Create box plots for numerical variables
+#numerical_vars <- c("age_diagnosis", "death_days_to", "age_at_last_followup_years", "disease_duration_years")
+
+
+# Loop through numeric variables and create box plots
+numeric_vars <- TCGA_aug[,-10] %>% select(where(is.numeric))
+
+for (var in names(numeric_vars)) {
+  plot <-
+    ggplot(TCGA_aug, aes(y = !!sym(var))) +
     geom_boxplot(outlier.colour = "red", outlier.shape = 16, width = 0.5, notch = FALSE) +
     labs(title = paste("Box Plot of", var), y = var) +
     theme_gray(base_size = 9) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
-})
+
+  # Save the plot to a file in the 'results/outliers' folder
+  file_name <- paste0("./../results/04_describe/04_outliers/04_", var, "_outliers.png")
+  ggsave(file_name, plot, width = 8, height = 4)
+}
+
+
 
 # Display the box plots in a grid
-grid.arrange(grobs = boxplots, ncol = 2)
+# grid.arrange(grobs = boxplots, ncol = 2)
 
 ```
 
 ## Correlation analysis and heatmap
 
 ```{r}
+#| label: 04-09
+
 # Calculate correlations for numerical variables
 correlations <- cor(select(TCGA_aug, all_of(numerical_vars)))
 
 # Create a heatmap of correlations
 cor_melted <- melt(correlations)
-ggplot(cor_melted, aes(Var1, Var2, fill = value)) +
+corr_plot <- ggplot(cor_melted, aes(Var1, Var2, fill = value)) +
   geom_tile() +
   labs(title = "Correlation Heatmap", x = "", y = "") +
   scale_fill_gradient(low = "lightblue", high = "darkblue") +
   theme_gray() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+ggsave("./../results/04_describe/04_correlation_heatmap.png", corr_plot, width = 10, height = 6)
 ```
