@@ -22,6 +22,7 @@ library(tidyr)
 ```{r}
 #| label: 02-02
 
+TCGA <- read_tsv("./../_raw/01_dat_load.tsv")
 glimpse(TCGA)
 ```
 
@@ -47,9 +48,9 @@ TCGA <- TCGA[,-1]
 #| label: 02-05
 
 # Check for missing values and gather the number of missing values per column
-missing_values_detailed <- TCGA %>%
-  summarise(across(everything(), ~sum(is.na(.)))) %>%
-  pivot_longer(cols = everything(), names_to = "attribute", values_to = "missing_count") %>%
+missing_values_detailed <- TCGA |> 
+  summarise(across(everything(), ~sum(is.na(.)))) |> 
+  pivot_longer(cols = everything(), names_to = "attribute", values_to = "missing_count") |> 
   arrange(desc(missing_count))
 
 # View detailed missing values summary
@@ -60,8 +61,8 @@ print(missing_values_detailed)
 #| label: 02-06
 
 # Visualize the missing values using a simple plot
-missing_values_detailed %>%
-  filter(missing_count > 0) %>%
+missing_values_detailed |> 
+  filter(missing_count > 0) |> 
   ggplot(aes(x = reorder(attribute, missing_count), y = missing_count)) +
   geom_bar(stat = "identity") +
   coord_flip() + # Flip coordinates for horizontal bar plot
@@ -82,8 +83,8 @@ For instance, "\[Not Available\]" could mean that the data was never collected, 
 special_values <- c("[Not Available]", "[Not Applicable]", "[Discrepancy]", "[Not Evaluated]", "[Unknown]")
 
 # Apply the transformation and save it as 'TCGA_clean'
-TCGA_clean <- TCGA %>%
-  mutate(across(where(is.character), factor)) %>%
+TCGA_clean <- TCGA |> 
+  mutate(across(where(is.character), factor)) |> 
   mutate(across(where(is.factor), ~fct_expand(.x, special_values)))
 
 ```
@@ -99,11 +100,11 @@ Columns like 'residual_tumor' has a very high percentage of missing values, actu
 threshold <- 0.8 * nrow(TCGA)
 
 # Drop columns with missing values above the threshold
-cols_to_drop <- missing_values_detailed %>%
-  filter(missing_count > threshold) %>%
+cols_to_drop <- missing_values_detailed |> 
+  filter(missing_count > threshold) |> 
   pull(attribute)
 
-TCGA_clean <- TCGA %>%
+TCGA_clean <- TCGA |> 
   select(-all_of(cols_to_drop))
 ```
 
@@ -115,7 +116,7 @@ Replacing missing/NULL data with substituted values. When data is missing in a d
 #| label: 02-09
 
 # Impute missing values for numerical columns with median
-TCGA_clean <- TCGA_clean %>%
+TCGA_clean <- TCGA_clean |> 
   mutate(across(where(is.numeric), ~if_else(is.na(.), median(., na.rm = TRUE), .)))
 
 # Impute missing values for categorical columns with mode
@@ -124,7 +125,7 @@ mode <- function(x) {
   ux[which.max(tabulate(match(x, ux)))]
 }
 
-TCGA_clean <- TCGA_clean %>%
+TCGA_clean <- TCGA_clean |> 
   mutate(across(where(is.character), ~if_else(is.na(.), mode(.), .)))
 
 
@@ -140,12 +141,12 @@ After cleaning missing values, what is still an issue:
 #| label: 02-10
 
 # Get a summary of missing values
-missing_summary <- TCGA_clean %>%
-  summarise(across(everything(), ~sum(is.na(.)))) %>%
+missing_summary <- TCGA_clean |> 
+  summarise(across(everything(), ~sum(is.na(.)))) |> 
   pivot_longer(cols = everything(), names_to = "column", values_to = "n_missing")
 
 # Check columns with remaining missing values
-missing_summary %>%
+missing_summary |> 
   filter(n_missing > 0)
 
 ```
@@ -156,7 +157,7 @@ missing_summary %>%
 #| label: 02-11
 
 # Renaming column names for better understanding
-TCGA_clean <- TCGA_clean %>%
+TCGA_clean <- TCGA_clean |> 
   rename(
     sampleID = bcr_patient_barcode,
     cancer_type = type,
@@ -171,5 +172,5 @@ TCGA_clean <- TCGA_clean %>%
 #| label: 02-12
 
 # Save the clean data
-write_tsv(TCGA_clean, "~/project29_git/data/02_dat_clean.tsv")
+write_tsv(TCGA_clean, "./../data/02_dat_clean.tsv")
 ```

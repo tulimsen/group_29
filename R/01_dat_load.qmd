@@ -40,3 +40,11 @@ download.file(url = url, destfile = path, mode = "wb")
 
 TCGA <- read_excel(path)
 ```
+## Save in "_raw"
+
+```{r}
+#| label: 01-04
+
+write_tsv(TCGA, "./../_raw/01_dat_load.tsv")
+```
+
