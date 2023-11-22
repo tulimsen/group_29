@@ -7,10 +7,9 @@ editor: visual
 ## Loading necessary libraries
 
 ```{r}
-install.packages("tidyverse")
-```
+#| label: 02-01
+#| message: false
 
-```{r}
 library(tidyverse)
 library(dplyr)
 library(stringr)
@@ -19,18 +18,25 @@ library(tidyr)
 
 ## Initial exploration
 
+# Raw data
 ```{r}
-# Initial inspection
+#| label: 02-02
+
 glimpse(TCGA)
 ```
 
+
 ```{r}
+#| label: 02-03
+
 head(TCGA)
 summary(TCGA)
 colnames(TCGA)
 ```
 
 ```{r}
+#| label: 02-04
+
 # Remove first column since it is redundant
 TCGA <- TCGA[,-1]
 ```
@@ -38,6 +44,8 @@ TCGA <- TCGA[,-1]
 ## Missing values
 
 ```{r}
+#| label: 02-05
+
 # Check for missing values and gather the number of missing values per column
 missing_values_detailed <- TCGA %>%
   summarise(across(everything(), ~sum(is.na(.)))) %>%
@@ -49,6 +57,8 @@ print(missing_values_detailed)
 ```
 
 ```{r}
+#| label: 02-06
+
 # Visualize the missing values using a simple plot
 missing_values_detailed %>%
   filter(missing_count > 0) %>%
@@ -66,6 +76,8 @@ In the data values like "\[Not Available\]", "\[Not Applicable\]", and "\[Discre
 For instance, "\[Not Available\]" could mean that the data was never collected, while "\[Not Applicable\]" could mean the question or data point was not relevant for that particular observation. In such cases, they are not simply 'missing' but convey a distinct meaning that could be important for analysis.
 
 ```{r}
+#| label: 02-07
+
 # Convert special strings to factors (if not already) and include special values as levels
 special_values <- c("[Not Available]", "[Not Applicable]", "[Discrepancy]", "[Not Evaluated]", "[Unknown]")
 
@@ -81,6 +93,8 @@ TCGA_clean <- TCGA %>%
 Columns like 'residual_tumor' has a very high percentage of missing values, actually all rows in this case are 'NA' - not useful for analysis. If 80 % or more rows in a column are missing we drop them:
 
 ```{r}
+#| label: 02-08
+
 # Define a threshold for dropping columns (80% missing values)
 threshold <- 0.8 * nrow(TCGA)
 
@@ -98,6 +112,8 @@ TCGA_clean <- TCGA %>%
 Replacing missing/NULL data with substituted values. When data is missing in a dataset, it can hinder analysis. Therefore, imputations is performed as a preprocessing step to allow for further analysis.
 
 ```{r}
+#| label: 02-09
+
 # Impute missing values for numerical columns with median
 TCGA_clean <- TCGA_clean %>%
   mutate(across(where(is.numeric), ~if_else(is.na(.), median(., na.rm = TRUE), .)))
@@ -121,6 +137,8 @@ sum(is.na(TCGA))
 After cleaning missing values, what is still an issue:
 
 ```{r}
+#| label: 02-10
+
 # Get a summary of missing values
 missing_summary <- TCGA_clean %>%
   summarise(across(everything(), ~sum(is.na(.)))) %>%
@@ -135,6 +153,8 @@ missing_summary %>%
 ## Renaming columns
 
 ```{r}
+#| label: 02-11
+
 # Renaming column names for better understanding
 TCGA_clean <- TCGA_clean %>%
   rename(
@@ -148,6 +168,8 @@ TCGA_clean <- TCGA_clean %>%
 ## Saving the cleaned data
 
 ```{r}
+#| label: 02-12
+
 # Save the clean data
 write_tsv(TCGA_clean, "~/project29_git/data/02_dat_clean.tsv")
 ```

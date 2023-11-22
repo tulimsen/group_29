@@ -8,21 +8,30 @@ editor: visual
 
 ```{r}
 #| label: 01-01
-#| echo: false
 #| eval: false
 
-install.packages("readxl")
+install.packages("tidyverse")
 
 ```
 
-## Loading data
+## Import libraries
+```{r}
+#| label: 01-02
+#| message: false
+
+library(tidyverse)
+library(readxl)
+
+```
+
+
+## Fetch and load data 
 
 Loading the detailed Information about TCGA-CDR and Analysis Results
 
 ```{r}
-#| label: 01-02
-
-library(readxl)
+#| label: 01-03
+#| warning: false
 
 url <- "https://drive.google.com/uc?export=download&id=1pqlKgEo8foNOx5L_ULJfundKBX4-NNti"
 path <- "../data/_raw/full_dataset.xlsx"
