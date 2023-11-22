@@ -1,0 +1,7 @@
+---
+title: "presentation"
+format:
+  revealjs:
+    embed-resources: true
+editor: visual
+---

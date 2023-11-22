@@ -1,13 +1,14 @@
 ---
-title: "03_describe"
-format: html
+title: "Description of the Data"
+format:
+  revealjs:
+    embed-resources: true
 editor: visual
 ---
 
 ## Loading necessary packages
 
 ```{r}
-install.packages("ggplot2")
 library(ggplot2)
 library(readr)
 library(dplyr)
@@ -19,7 +20,7 @@ library(reshape2)
 ## Loading the data
 
 ```{r}
-TCGA_aug <- read_tsv("~/project29_git/data/03_dat_aug.tsv", show_col_types = FALSE)
+TCGA_aug <- read_tsv("../data/03_dat_aug.tsv", show_col_types = FALSE)
 ```
 
 ## Describing the data
@@ -153,7 +154,7 @@ ggplot(TCGA_aug, aes(x = cancer_type, fill = gender)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
 
 # Create a grouped bar plot for Pathologic Stage vs. Cancer Type
-ggplot(TCGA_aug, aes(x = cancer_type, fill = pathologic_stage_group)) +
+ggplot(TCGA_aug, aes(x = cancer_type, fill = stage_group)) +
   geom_bar(position = "dodge") +
   labs(title = "Distribution of Cancer Types by Pathologic Stage", x = "Cancer Type", y = "Count") +
   theme_gray(base_size = 9) +

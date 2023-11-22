@@ -1,6 +1,8 @@
 ---
-title: "clean"
-format: html
+title: "Data Cleaning"
+format:
+  revealjs:
+    embed-resources: true
 editor: visual
 ---
 
@@ -19,13 +21,13 @@ library(tidyr)
 ## Initial exploration
 
 # Raw data
+
 ```{r}
 #| label: 02-02
 
-TCGA <- read_tsv("./../_raw/01_dat_load.tsv")
+TCGA <- read_tsv("./../data/01_dat_load.tsv")
 glimpse(TCGA)
 ```
-
 
 ```{r}
 #| label: 02-03
