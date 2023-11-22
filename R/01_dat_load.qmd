@@ -7,6 +7,10 @@ editor: visual
 ## Importing packages
 
 ```{r}
+#| label: 01-01
+#| echo: false
+#| eval: false
+
 install.packages("readxl")
 
 ```
@@ -16,6 +20,8 @@ install.packages("readxl")
 Loading the detailed Information about TCGA-CDR and Analysis Results
 
 ```{r}
+#| label: 01-02
+
 library(readxl)
 
 url <- "https://drive.google.com/uc?export=download&id=1pqlKgEo8foNOx5L_ULJfundKBX4-NNti"
