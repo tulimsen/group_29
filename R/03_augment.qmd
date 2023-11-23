@@ -100,6 +100,21 @@ TCGA_aug <- TCGA_aug |>
   mutate(stage_group = map2_chr(pathologic_stage, clinical_stage, map_stage))
 ```
 
+## Creating subset of data
+
+```{r}
+# Create a subset of your data with the top 6 cancer types
+top_cancer_types <- TCGA_clean %>%
+  count(cancer_type) %>%
+  arrange(desc(n)) %>%
+  slice(1:6) %>%
+  pull(cancer_type)
+
+TCGA_top_6 <- TCGA_aug %>%
+  filter(cancer_type %in% top_cancer_types)
+
+```
+
 ## Saving data
 
 ```{r}

@@ -1,5 +1,5 @@
 ---
-title: "00_all"
+title: "Complete Project Documentation"
 format:
   revealjs:
     embed-resources: true
@@ -12,14 +12,14 @@ editor: visual
 
 {{< include 03_augment.qmd >}}
 
-## Rendering results
-
 ```{r}
 # Loading library
 library(quarto)
 library(knitr)
 library(rmarkdown)
+```
 
+```{r}
 #01
 quarto_render("./../R/01_dat_load.qmd")
 
@@ -57,4 +57,22 @@ file.rename(from = "./../R/05_analysis_1.html",
 quarto_render("./../doc/presentation.qmd")
 file.rename(from = "./../doc/presentation.html",
             to = "./../doc/presentation.html")
+
+```
+
+```{r}
+# List of .qmd files to render individually
+qmd_files <- c("01_dat_load.qmd", "02_dat_clean.qmd", "03_augment.qmd",
+               "04_describe.qmd", "05_analysis_1.qmd", "06_analysis_2.qmd")
+
+# Render each .qmd to .html and move to 'results' directory
+for (qmd_file in qmd_files) {
+  quarto_render(input = paste0("../R/", qmd_file), execute_params = list(run = "auto"))
+  file.rename(from = paste0(tools::file_path_sans_ext(qmd_file), ".html"),
+              to = paste0("../results/", tools::file_path_sans_ext(qmd_file), ".html"))
+}
+
+# Render the presentation separately to the 'doc' directory
+quarto_render(input = "../doc/presentation.qmd", output_dir = "../doc", execute_params = list(run = "auto"))
+
 ```

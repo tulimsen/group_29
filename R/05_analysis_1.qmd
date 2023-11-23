@@ -1,5 +1,5 @@
 ---
-title: "05_analysis"
+title: "Survival Analysis"
 format: html
 editor: visual
 ---
@@ -11,12 +11,13 @@ library(survival)
 library(broom)
 library(forestplot)
 library(survminer)
+library(purrr)
 ```
 
 ## Loading the data
 
 ```{r}
-TCGA_aug <- read_tsv("~/project29_git/data/03_dat_aug.tsv", show_col_types = FALSE)
+TCGA_aug <- as.data.frame(read_tsv("./../data/03_dat_aug.tsv", show_col_types = FALSE))
 ```
 
 ## **Create the Survival Object**
@@ -30,6 +31,11 @@ First, ensure that the dataset (**`TCGA_aug`**) has the necessary variables for 
 Create a **`Surv`** object, which is a special type of object used by the survival package:
 
 ```{r}
+
+# Ensure cancer_type and stage is treated as a factor
+TCGA_aug$cancer_type <- as.factor(TCGA_aug$cancer_type)
+TCGA_aug$stage_group <- as.factor(TCGA_aug$stage_group)
+
 # OS.time is the time variable and OS is the event indicator
 surv_obj <- Surv(time = TCGA_aug$OS.time, event = TCGA_aug$OS)
 ```
@@ -39,8 +45,9 @@ surv_obj <- Surv(time = TCGA_aug$OS.time, event = TCGA_aug$OS)
 Fit the model using the **`coxph`** function. Select predictors based on the understanding of the data and previous analyses.
 
 ```{r}
-# Fit a CoxPH model with age at diagnosis and cancer type as predictors
-cox_model <- coxph(surv_obj ~ age_diagnosis + cancer_type + gender + stage_group + race, data = TCGA_aug)
+# Fit a Cox proportional hazards model
+cox_model <- coxph(surv_obj ~ strata(cancer_type) + age_diagnosis + 
+                     gender + race, data = TCGA_aug)
 ```
 
 ## Model summary
@@ -66,13 +73,14 @@ cox.zph(cox_model)
 Use the **`ggplot2`** package to visualize the results, such as plotting the estimated survival curves:
 
 ```{r}
-ggsurvplot(
-  survfit(cox_model), 
-  data = TCGA_aug, 
-  pval = TRUE, 
-  conf.int = TRUE,
-  risk.table = TRUE
-)
-```
+# Survival plot
 
-## 
+# Use survfit() to generate survival curves for the fitted model
+fit_surv <- survfit(cox_model)
+
+# Plot survival curves without p-values and confidence intervals
+survival_plot <- ggsurvplot(fit_surv, data = TCGA_aug, ggtheme = theme_minimal(),
+           xlab = "Time", ylab = "Survival probability",
+           test.for.trend = T, legend = "right")
+
+```
