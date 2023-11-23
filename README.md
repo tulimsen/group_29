@@ -6,4 +6,4 @@ Presentation link: [R for Bio Data Science, group 29](https://raw.githack.com/Ja
 
 -   Jasmin Gade Støvlbæk, s184275 - github: Jasmingade
 
--   
+-   Monica Nielsen, s223448 - github: monicanielsen
