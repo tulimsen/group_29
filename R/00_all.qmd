@@ -2,7 +2,7 @@
 title: "Complete Project Documentation"
 format:
   revealjs:
-    embed-resources: true
+    embed-resources: false
 editor: visual
 ---
 
@@ -63,7 +63,7 @@ file.rename(from = "./../doc/presentation.html",
 ```{r}
 # List of .qmd files to render individually
 qmd_files <- c("01_dat_load.qmd", "02_dat_clean.qmd", "03_augment.qmd",
-               "04_describe.qmd", "05_analysis_1.qmd", "06_analysis_2.qmd")
+               "04_describe.qmd", "05_analysis_1.qmd")
 
 # Render each .qmd to .html and move to 'results' directory
 for (qmd_file in qmd_files) {
@@ -73,6 +73,6 @@ for (qmd_file in qmd_files) {
 }
 
 # Render the presentation separately to the 'doc' directory
-quarto_render(input = "../doc/presentation.qmd", output_dir = "../doc", execute_params = list(run = "auto"))
+quarto_render(input = "./../doc/presentation.qmd")
 
 ```

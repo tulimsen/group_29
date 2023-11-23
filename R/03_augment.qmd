@@ -110,7 +110,7 @@ top_cancer_types <- TCGA_clean %>%
   slice(1:6) %>%
   pull(cancer_type)
 
-TCGA_top_6 <- TCGA_aug %>%
+TCGA_aug <- TCGA_aug %>%
   filter(cancer_type %in% top_cancer_types)
 
 ```

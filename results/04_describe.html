@@ -1156,45 +1156,6 @@ margin-right: 0; }
 <section id="describing-the-data" class="slide level2">
 <h2>Describing the data</h2>
 <p>Summary of basic statistics for TCGA_aug (compare them to TCGA_clean to check for integrity after imputation/augmentation).</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 16 × 8
-   Variable               Min `1st Qu`  Median     Mean `3rd Qu`     Max      SD
-   &lt;chr&gt;                &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
- 1 age_diagnosis      1   e+1   5   e1  6   e1  5.91e+1   7   e1    90   1.44e+1
- 2 initial_patholog…  1.98e+3   2.01e3  2.01e3  2.01e+3   2.01e3  2013   4.30e+0
- 3 birth_days_to     -3.29e+4  -2.56e4 -2.22e4 -2.18e+4  -1.86e4 -3982   5.24e+3
- 4 last_contact_day… -6.4 e+1   5.28e2  7.66e2  1.00e+3   1.13e3 11252   9.13e+2
- 5 death_days_to      0         5.48e2  5.48e2  6.46e+2   5.48e2 10870   5.57e+2
- 6 new_tumor_event_… -3.59e+2   3.64e2  3.64e2  4.33e+2   3.64e2 10334   4.25e+2
- 7 OS                 0         0       0       3.25e-1   1   e0     1   4.68e-1
- 8 OS.time            0         3.83e2  7.14e2  1.04e+3   1.36e3 11252   1.04e+3
- 9 DSS                0         0       0       2.24e-1   0          1   4.17e-1
-10 DSS.time           0         3.92e2  7.22e2  1.04e+3   1.36e3 11252   1.03e+3
-11 DFI                0         0       0       1.00e-1   0          1   3.00e-1
-12 DFI.time           0         7.2 e2  7.2 e2  8.69e+2   7.2 e2  8556   6.90e+2
-13 PFI                0         0       0       3.58e-1   1   e0     1   4.79e-1
-14 PFI.time           0         2.72e2  5.64e2  8.61e+2   1.11e3 11217   9.32e+2
-15 age_at_last_foll…  1.37e+1   5.37e1  6.35e1  6.24e+1   7.28e1    99.2 1.42e+1
-16 disease_duration… -1.8 e-1   1.05e0  1.96e0  2.84e+0   3.74e0    30.8 2.84e+0</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 405 × 4
-   Level     n Percentage Variable   
-   &lt;chr&gt; &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;      
- 1 ACC      92      0.824 cancer_type
- 2 BLCA    412      3.69  cancer_type
- 3 BRCA   1097      9.83  cancer_type
- 4 CESC    307      2.75  cancer_type
- 5 CHOL     45      0.403 cancer_type
- 6 COAD    459      4.11  cancer_type
- 7 DLBC     48      0.430 cancer_type
- 8 ESCA    185      1.66  cancer_type
- 9 GBM     596      5.34  cancer_type
-10 HNSC    528      4.73  cancer_type
-# ℹ 395 more rows</code></pre>
-</div>
-</div>
 </section>
 <section id="visualization-of-numerical-data" class="slide level2">
 <h2>Visualization of numerical data</h2>
