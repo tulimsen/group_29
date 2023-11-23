@@ -1,6 +1,8 @@
 ---
 title: "04_augment"
-format: html
+format:
+  revealjs:
+    embed-resources: true
 editor: visual
 ---
 

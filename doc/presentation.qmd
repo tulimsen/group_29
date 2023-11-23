@@ -1,0 +1,70 @@
+---
+title: "R for Bio Data Science"
+subtitle: "TCGA Pan-Cancer Analysis with Emphasis on Survival Analysis"
+# author: "Jasmin Gade Støvlbæk, Monica Nielsen, Sina Ahmadzai, Yusuf Tunc"
+format:
+  revealjs:
+    theme: "dark"
+    embed-resources: true
+editor: visual
+---
+
+## Introduction to TCGA Pan-Cancer Dataset
+
+-   Brief introduction to The Cancer Genome Atlas (TCGA)
+
+-   Significance of the Pan-Cancer dataset in cancer genomics research
+
+-   How this dataset helps in understanding cancer at a molecular level
+
+## Project Aim and Focus
+
+-   State the project's aim: "To perform an in-depth TCGA Pan-Cancer analysis, focusing on survival analysis."
+
+-   Mention the use of Cox proportional hazards models to gain insights into cancer prognosis.
+
+## Data Acquisition and Cleaning
+
+-   Discuss sources of the TCGA dataset.
+
+-   Outline the data cleaning process: handling missing values, standardizing formats, etc.
+
+    -   drop values
+
+    -   Impute values
+
+## Data Transformation and Tools
+
+-   Explain the data transformation and augmentation techniques used.
+
+-   Highlight the use of Tidyverse in RStudio for data analysis.
+
+## Exploratory Data Analysis Insights
+
+-   Summarize key findings from the EDA.
+
+-   Include visualizations like bar charts or scatter plots to illustrate cancer-specific patterns.
+
+## Survival Analysis Outcomes
+
+-   Present the main results from the CoxPH model.
+
+-   Use graphs (like survival curves) to visually represent the survival analysis.
+
+## Interpreting the Model
+
+-   Discuss the interpretation of the CoxPH model's results.
+
+-   Explain the significance of hazard ratios in understanding survival risk.
+
+## Implications and Limitations
+
+-   Discuss the implications of your findings for cancer research.
+
+-   Address any limitations of your study and suggest future research directions.
+
+## Conclusion and Future Outlook
+
+-   Recap the main objectives, methods, and findings of your study.
+
+-   Conclude with remarks on the potential impact of your work and future perspectives in cancer genomics.

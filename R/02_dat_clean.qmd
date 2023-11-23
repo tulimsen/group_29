@@ -1,6 +1,8 @@
 ---
-title: "clean"
-format: html
+title: "Data Cleaning"
+format:
+  revealjs:
+    embed-resources: true
 editor: visual
 ---
 
@@ -19,13 +21,13 @@ library(tidyr)
 ## Initial exploration
 
 # Raw data
+
 ```{r}
 #| label: 02-02
 
-TCGA <- read_tsv("./../_raw/01_dat_load.tsv")
+TCGA <- read_tsv("./../data/01_dat_load.tsv")
 glimpse(TCGA)
 ```
-
 
 ```{r}
 #| label: 02-03
@@ -61,13 +63,15 @@ print(missing_values_detailed)
 #| label: 02-06
 
 # Visualize the missing values using a simple plot
-missing_values_detailed |> 
+missingvalues <- missing_values_detailed |> 
   filter(missing_count > 0) |> 
   ggplot(aes(x = reorder(attribute, missing_count), y = missing_count)) +
   geom_bar(stat = "identity") +
   coord_flip() + # Flip coordinates for horizontal bar plot
   labs(x = "Attributes", y = "Number of Missing Values", title = "Missing Values per Attribute") +
   theme_minimal()
+
+ggsave("./../results/02_clean/02_missingvalues.png", missingvalues, width = 10, height = 6)
 ```
 
 ### Special values

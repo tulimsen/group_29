@@ -1,6 +1,8 @@
 ---
-title: "01_load"
-format: html
+title: "Data Loading"
+format:
+  revealjs:
+    embed-resources: true
 editor: visual
 ---
 
@@ -15,6 +17,7 @@ install.packages("tidyverse")
 ```
 
 ## Import libraries
+
 ```{r}
 #| label: 01-02
 #| message: false
@@ -24,8 +27,7 @@ library(readxl)
 
 ```
 
-
-## Fetch and load data 
+## Fetch and load data
 
 Loading the detailed Information about TCGA-CDR and Analysis Results
 
@@ -40,11 +42,11 @@ download.file(url = url, destfile = path, mode = "wb")
 
 TCGA <- read_excel(path)
 ```
-## Save in "_raw"
+
+## Save in "data"
 
 ```{r}
 #| label: 01-04
 
-write_tsv(TCGA, "./../_raw/01_dat_load.tsv")
+write_tsv(TCGA, "./../data/01_dat_load.tsv")
 ```
-
