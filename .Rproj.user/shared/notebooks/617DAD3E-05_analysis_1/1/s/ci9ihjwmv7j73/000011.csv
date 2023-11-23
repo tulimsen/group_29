@@ -1,3 +1,0 @@
-"0","# Fit a Cox proportional hazards model"
-"0","cox_model <- coxph(surv_obj ~ strata(cancer_type) + age_diagnosis + "
-"0","                     gender + race, data = TCGA_aug)"

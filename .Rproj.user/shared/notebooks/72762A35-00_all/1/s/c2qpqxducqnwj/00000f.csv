@@ -1,55 +1,0 @@
-"0","# Vector of .qmd files"
-"0","qmd_files <- list.files(path = ""../R"", pattern = ""*.qmd"", full.names = TRUE)"
-"0",""
-"0","# Define the function to render and move files"
-"0","render_and_move <- function(qmd_file, output_dir = ""../results"") {"
-"0","  # Render the qmd file to html"
-"0","  quarto_render(input = qmd_file, execute_params = list(run = ""auto""))"
-"0","  "
-"0","  # Construct the target file path"
-"0","  file_base <- tools::file_path_sans_ext(basename(qmd_file))"
-"0","  target_html <- file.path(output_dir, paste0(file_base, "".html""))"
-"0","  "
-"0","  # Move the file to the results directory"
-"0","  file.rename(paste0(file_base, "".html""), target_html)"
-"0","}"
-"0",""
-"0","# Apply the function to each qmd file"
-"0","walk(qmd_files, render_and_move)"
-"1","[31m[31m
-
-processing file: 00_all.qmd
-[31m[39m"
-"1","[31m  |                                                           |                                                   |   0%  |                                                           |.                                                  |   2%                   [39m"
-"1","[31m  |                                                           |..                                                 |   4% [01-01]           [39m"
-"1","[31m  |                                                           |...                                                |   6%[39m"
-"1","[31m                     |                                                           |....                                               |   8% [01-02]           [39m"
-"1","[31m  |                                                           |.....                                              |  10%                   [39m"
-"1","[31m  |                                                           |......                                             |  12% [01-03]           [39m"
-"1","[31m[31mtrying URL 'https://drive.google.com/uc?export=download&id=1pqlKgEo8foNOx5L_ULJfundKBX4-NNti'
-[31m[39m"
-"1","[31m[31m
-Quitting from lines 35-44 [01-03] (00_all.qmd)
-[31m[39m"
-"1","[31m[31mError in `download.file()`:
-! cannot open URL 'https://drive.google.com/uc?export=download&id=1pqlKgEo8foNOx5L_ULJfundKBX4-NNti'
-Backtrace:
- 1. utils::download.file(url = url, destfile = path, mode = ""wb"")
-[31m[39m"
-"1","[31m                                                                                                             
-[31mExecution halted
-[31m[39m"
-"1","[1m[33mError[39m in `map()`:[22m
-[38;5;255m[36mℹ[38;5;255m In index: 1.[39m
-[1mCaused by error:[22m
-[33m![39m System command 'quarto' failed
-Backtrace:
-[90m  1. [39m[1mpurrr[22m::walk(qmd_files, render_and_move)
-[90m  2. [39m[1m[94mpurrr::map([39m[22m.x, .f, ..., .progress = .progress[1m[94m)[39m[22m
-[90m  3. [39mpurrr:::map_(""list"", .x, .f, ..., .progress = .progress)
-[90m  7. [39m[1mglobal[22m .f(.x[[i]], ...)
-[90m  8. [39m[1mquarto[22m::quarto_render(input = qmd_file, execute_params = list(run = ""auto""))
-[90m  9. [39m[1mprocessx[22m::run(quarto_bin, args, echo = TRUE)
-[90m 10. [39mthrow(...)
-[90m 11. [39m[1mbase[22m::signalCondition(cond)
-"

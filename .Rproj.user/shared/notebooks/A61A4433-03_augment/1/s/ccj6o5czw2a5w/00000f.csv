@@ -1,3 +1,0 @@
-"0","#| label: 03-06"
-"0",""
-"0","write_tsv(TCGA_aug, ""../data/03_dat_aug.tsv"")"

@@ -1,4 +1,0 @@
-"0","#| label: 02-12"
-"0",""
-"0","# Save the clean data"
-"0","write_tsv(TCGA_clean, ""./../data/02_dat_clean.tsv"")"

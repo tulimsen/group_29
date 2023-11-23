@@ -1,3 +1,0 @@
-"0","#| label: 01-04"
-"0",""
-"0","write_tsv(TCGA, ""./../data/01_dat_load.tsv"")"

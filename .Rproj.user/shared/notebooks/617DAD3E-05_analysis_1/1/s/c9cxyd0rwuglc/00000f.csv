@@ -1,7 +1,0 @@
-"0","# Survival plot"
-"0",""
-"0","# Use survfit() to generate survival curves for the fitted model"
-"0","fit_surv <- survfit(cox_model)"
-"2","Error in model.frame.default(formula = Surv(OS.time, OS) ~ age_diagnosis +  : 
-  factor race has new levels AMERICAN INDIAN OR ALASKA NATIVE, NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER
-"

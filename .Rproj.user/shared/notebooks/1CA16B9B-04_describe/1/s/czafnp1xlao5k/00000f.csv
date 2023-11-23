@@ -1,8 +1,0 @@
-"0","#| label: 04-01"
-"0","#| message: false"
-"0","library(ggplot2)"
-"0","library(readr)"
-"0","library(dplyr)"
-"0","library(purrr)"
-"0","library(gridExtra)"
-"0","library(reshape2)"
