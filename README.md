@@ -10,4 +10,4 @@ Presentation link: [R for Bio Data Science, group 29](https://raw.githack.com/Ja
 
 -   Sina Ahmadzai, s190482 - github:s190482
 
--   Yusuf Tunc, 
+-   Yusuf Tunc, s233898 - github:tulimsen
