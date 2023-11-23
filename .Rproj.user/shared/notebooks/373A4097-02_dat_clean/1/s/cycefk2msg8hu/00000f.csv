@@ -1,0 +1,4 @@
+"0","#| label: 02-04"
+"0",""
+"0","# Remove first column since it is redundant"
+"0","TCGA <- TCGA[,-1]"

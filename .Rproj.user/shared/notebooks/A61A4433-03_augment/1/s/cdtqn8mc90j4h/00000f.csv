@@ -1,0 +1,3 @@
+"0","#| label: 03-02"
+"0",""
+"0","TCGA_clean <- read_tsv(""../data/02_dat_clean.tsv"", show_col_types = FALSE)"

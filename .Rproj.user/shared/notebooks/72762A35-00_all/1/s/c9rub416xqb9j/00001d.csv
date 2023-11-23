@@ -1,0 +1,43 @@
+"0","# Render the presentation separately to the 'doc' directory
+quarto_render(input = ""./../doc/presentation.qmd"")
+"
+"1","[31m[1mpandoc [22m
+  to: revealjs
+  output-file: presentation.html
+  standalone: true
+  embed-resources: true
+  wrap: none
+  default-image-extension: png
+  html-math-method:
+    method: mathjax
+    url: >-
+      https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML-full
+  slide-level: 2
+  
+[1mmetadata[22m
+  link-citations: true
+  width: 1050
+  height: 700
+  margin: 0.1
+  center: false
+  navigationMode: linear
+  controlsLayout: edges
+  controlsTutorial: false
+  hash: true
+  history: true
+  hashOneBasedIndex: false
+  fragmentInURL: false
+  transition: none
+  backgroundTransition: none
+  pdfSeparateFragments: false
+  lang: en
+  auto-stretch: true
+  title: R for Bio Data Science
+  subtitle: TCGA Pan-Cancer Analysis with Emphasis on Survival Analysis
+  editor: visual
+  theme: dark
+  
+[39m"
+"1","[31mOutput created: presentation.html
+
+[39m"
