@@ -1,6 +1,8 @@
 ---
 title: "Survival Analysis"
-format: html
+format:
+  revealjs:
+    embed-resources: true
 editor: visual
 ---
 
@@ -17,8 +19,8 @@ library(survminer)
 ## Loading the data
 
 ```{r}
-TCGA_aug <- read_tsv("./../data/03_dat_aug.tsv", show_col_types = FALSE)
-TCGA_aug <- as.data.frame(TCGA_aug)
+TCGA_aug <- read_tsv("./../data/03_dat_aug.tsv", show_col_types = FALSE) %>%
+  as.data.frame()
 ```
 
 ## **Create the Survival Object**
@@ -33,11 +35,10 @@ Create a **`Surv`** object, which is a special type of object used by the surviv
 
 ```{r}
 
-# Ensure cancer_type and stage is treated as a factor
-TCGA_aug$cancer_type <- as.factor(TCGA_aug$cancer_type)
-TCGA_aug$stage_group <- as.factor(TCGA_aug$stage_group)
-TCGA_aug$race <- as.factor(TCGA_aug$race)
-TCGA_aug$gender <- as.factor(TCGA_aug$gender)
+# Ensure selected variables are treated as factors
+selected_factors <- c("cancer_type", "stage_group", "race", "gender")
+TCGA_aug <- TCGA_aug %>%
+  mutate(across(all_of(selected_factors), as.factor))
 
 # OS.time is the time variable and OS is the event indicator
 surv_obj <- Surv(time = TCGA_aug$OS.time, event = TCGA_aug$OS)
@@ -86,7 +87,7 @@ survival_plot <- ggsurvplot(fit_surv, data = TCGA_aug, ggtheme = theme_gray(),
            xlab = "Time", ylab = "Survival probability",
            test.for.trend = TRUE, legend = "right")
 
-# Now you can use ggsave to save the actual plot
+# Save the plot
 ggsave("./../results/05_analysis_1/05_survival_plot.png", survival_plot$plot, width = 10, height = 6)
 
 ```
@@ -104,7 +105,7 @@ ph_cox_model <- coxph(Surv(OS.time, OS) ~ cancer_type + age_diagnosis
 # Create the hazard ratio plot
 hp_plot <- ggforest(ph_cox_model, data = TCGA_aug)
 
-# Now you can use ggsave to save the actual plot
+# Save the plot
 ggsave("./../results/05_analysis_1/05_hazardR_plot.png", hp_plot, width = 10, height = 6)
 
 

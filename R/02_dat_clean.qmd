@@ -55,8 +55,7 @@ missing_values_detailed <- TCGA |>
   pivot_longer(cols = everything(), names_to = "attribute", values_to = "missing_count") |> 
   arrange(desc(missing_count))
 
-# View detailed missing values summary
-print(missing_values_detailed)
+# View detailed missing values summary by using print
 ```
 
 ```{r}
