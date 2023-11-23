@@ -7,17 +7,18 @@ editor: visual
 ## Loading packages
 
 ```{r}
+library(tidyverse)
 library(survival)
 library(broom)
 library(forestplot)
 library(survminer)
-library(purrr)
 ```
 
 ## Loading the data
 
 ```{r}
-TCGA_aug <- as.data.frame(read_tsv("./../data/03_dat_aug.tsv", show_col_types = FALSE))
+TCGA_aug <- read_tsv("./../data/03_dat_aug.tsv", show_col_types = FALSE)
+TCGA_aug <- as.data.frame(TCGA_aug)
 ```
 
 ## **Create the Survival Object**
@@ -35,6 +36,8 @@ Create a **`Surv`** object, which is a special type of object used by the surviv
 # Ensure cancer_type and stage is treated as a factor
 TCGA_aug$cancer_type <- as.factor(TCGA_aug$cancer_type)
 TCGA_aug$stage_group <- as.factor(TCGA_aug$stage_group)
+TCGA_aug$race <- as.factor(TCGA_aug$race)
+TCGA_aug$gender <- as.factor(TCGA_aug$gender)
 
 # OS.time is the time variable and OS is the event indicator
 surv_obj <- Surv(time = TCGA_aug$OS.time, event = TCGA_aug$OS)
@@ -79,8 +82,37 @@ Use the **`ggplot2`** package to visualize the results, such as plotting the est
 fit_surv <- survfit(cox_model)
 
 # Plot survival curves without p-values and confidence intervals
-survival_plot <- ggsurvplot(fit_surv, data = TCGA_aug, ggtheme = theme_minimal(),
+survival_plot <- ggsurvplot(fit_surv, data = TCGA_aug, ggtheme = theme_gray(),
            xlab = "Time", ylab = "Survival probability",
-           test.for.trend = T, legend = "right")
+           test.for.trend = TRUE, legend = "right")
+
+# Now you can use ggsave to save the actual plot
+ggsave("./../results/05_analysis_1/05_survival_plot.png", survival_plot$plot, width = 10, height = 6)
+
+```
+
+```{r}
+library(tidyverse)
+library(survival)
+library(broom)
+
+# Fit a Cox proportional hazards model without stratification
+ph_cox_model <- coxph(Surv(OS.time, OS) ~ cancer_type + age_diagnosis 
+                      + gender + stage_group, data = TCGA_aug)
+
+
+# Create the hazard ratio plot
+hp_plot <- ggforest(ph_cox_model, data = TCGA_aug)
+
+# Now you can use ggsave to save the actual plot
+ggsave("./../results/05_analysis_1/05_hazardR_plot.png", hp_plot, width = 10, height = 6)
+
+
+# Data frames of hazard ratios
+# Apply broom::tidy to the coxph model ph_cox_model
+# tidied_coxph <- tidy(ph_cox_model)
+
+# The above dataframe provides logtransformed data
+#tidied_coxph$hazard_ratio <- exp(tidied_coxph$estimate)
 
 ```
