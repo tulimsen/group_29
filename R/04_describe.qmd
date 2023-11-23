@@ -81,10 +81,6 @@ summary_categorical <- function(df) {
 
 # Apply the function to TCGA_aug
 categorical_summary <- summary_categorical(TCGA_aug[,-1]) # without the sampleID's
-
-
-numeric_summary
-categorical_summary
 ```
 
 ## Visualization of numerical data
@@ -107,10 +103,6 @@ for (var in names(numeric_vars)) {
   file_name <- paste0("./../results/04_describe/04_numeric/04_", var, "_histogram.png")
   ggsave(file_name, plot, width = 8, height = 4)
 }
-
-
-# Display plots in a grid
-# do.call(grid.arrange, c(num_list[c(1,14,15,3)], ncol = 2))
 ```
 
 ```{r}
@@ -133,7 +125,6 @@ disease_duration_plot <- ggplot(TCGA_aug, aes(x = cancer_type, y = disease_durat
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
 
 ggsave("./../results/04_describe/04_numeric/04_disease_duration_boxplot.png", disease_duration_plot, width = 10, height = 6)
-
 ```
 
 ## Visualization of categorical data
@@ -159,10 +150,6 @@ for (var in names(categorical_vars)) {
   file_name <- paste0("./../results/04_describe/04_categorical/04_", var, "_barplot.png")
   ggsave(file_name, plot, width = 8, height = 4)
 }
-
-# Display plots in a grid
-# do.call(grid.arrange, c(cat_list[c(1,2,9,15,16)], ncol = 2))
-
 ```
 
 ```{r}
@@ -211,18 +198,14 @@ for (var in names(numeric_vars)) {
   file_name <- paste0("./../results/04_describe/04_outliers/04_", var, "_outliers.png")
   ggsave(file_name, plot, width = 8, height = 4)
 }
-
-
-
-# Display the box plots in a grid
-# grid.arrange(grobs = boxplots, ncol = 2)
-
 ```
 
 ## Correlation analysis and heatmap
 
 ```{r}
 #| label: 04-09
+
+numerical_vars <- c("age_diagnosis", "death_days_to", "age_at_last_followup_years", "disease_duration_years")
 
 # Calculate correlations for numerical variables
 correlations <- cor(select(TCGA_aug, all_of(numerical_vars)))
