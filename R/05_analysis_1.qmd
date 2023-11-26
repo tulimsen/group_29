@@ -98,14 +98,16 @@ ggsave("./../results/05_analysis_1/05_survival_plot.png", survival_plot$plot, wi
 
 ```
 
-##  Hazard Ratio plot
+## Hazard Ratio plot
 
 We fit a Cox proportional hazards model without stratification and create a hazard ratio plot to visualize the impact of predictor variables on survival. The `ggforest` function is used for this purpose.
 
 ```{r}
-library(tidyverse)
-library(survival)
-library(broom)
+# References for ggforest plot
+TCGA_aug <- TCGA_aug %>%
+  mutate(
+    stage_group = fct_relevel(stage_group, "Stage 1") # stage reference is now stage 1
+)
 
 # Fit a Cox proportional hazards model without stratification
 ph_cox_model <- coxph(Surv(OS.time, OS) ~ cancer_type + age_diagnosis 
