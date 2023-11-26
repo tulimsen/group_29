@@ -4,7 +4,7 @@ subtitle: "TCGA Pan-Cancer Analysis with Emphasis on Survival Analysis"
 # author: "Jasmin Gade Støvlbæk, Monica Nielsen, Sina Ahmadzai, Yusuf Tunc"
 format:
   revealjs:
-    theme: "dark"
+    theme: "simple"
     embed-resources: true
 editor: visual
 ---

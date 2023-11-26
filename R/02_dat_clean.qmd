@@ -6,7 +6,11 @@ format:
 editor: visual
 ---
 
+# Data Cleaning
+
 ## Loading necessary libraries
+
+In this section, we load essential R libraries that are required for data cleaning and preparation. The libraries include "tidyverse," "dplyr," "stringr," and "tidyr," which provide powerful tools for data manipulation and transformation.
 
 ```{r}
 #| label: 02-01
@@ -20,7 +24,9 @@ library(tidyr)
 
 ## Initial exploration
 
-# Raw data
+### Raw data
+
+We begin by reading the previously loaded raw data from "01_dat_load.tsv" and inspecting its structure using the **`glimpse`**, **`head`**, **`summary`**, and **`colnames`** functions. This initial exploration helps us understand the dataset's dimensions and its variable names.
 
 ```{r}
 #| label: 02-02
@@ -46,6 +52,8 @@ TCGA <- TCGA[,-1]
 
 ## Missing values
 
+We check for missing values in the dataset and create a summary of the number of missing values per column.
+
 ```{r}
 #| label: 02-05
 
@@ -57,6 +65,8 @@ missing_values_detailed <- TCGA |>
 
 # View detailed missing values summary by using print
 ```
+
+We visualize the missing values using a bar plot to gain insights into the distribution of missing data across attributes.
 
 ```{r}
 #| label: 02-06
@@ -94,7 +104,7 @@ TCGA_clean <- TCGA |>
 
 ### Dropping values
 
-Columns like 'residual_tumor' has a very high percentage of missing values, actually all rows in this case are 'NA' - not useful for analysis. If 80 % or more rows in a column are missing we drop them:
+Columns with a high percentage of missing values (above 80%) are dropped from the dataset as they may not be useful for analysis.
 
 ```{r}
 #| label: 02-08
@@ -113,7 +123,7 @@ TCGA_clean <- TCGA |>
 
 ### Imputing values
 
-Replacing missing/NULL data with substituted values. When data is missing in a dataset, it can hinder analysis. Therefore, imputations is performed as a preprocessing step to allow for further analysis.
+Replacing missing/NULL data with substituted values. When data is missing in a dataset, it can hinder analysis. Therefore, imputations is performed as a preprocessing step to allow for further analysis. Missing numerical values are imputed with the median, and missing categorical values are imputed with the mode (most frequent value).
 
 ```{r}
 #| label: 02-09
@@ -156,6 +166,8 @@ missing_summary |>
 
 ## Renaming columns
 
+We rename columns in the cleaned dataset for better clarity and understanding.
+
 ```{r}
 #| label: 02-11
 
@@ -170,6 +182,8 @@ TCGA_clean <- TCGA_clean |>
 ```
 
 ## Saving the cleaned data
+
+Finally, the cleaned dataset is saved as "02_dat_clean.tsv" for further analysis.
 
 ```{r}
 #| label: 02-12

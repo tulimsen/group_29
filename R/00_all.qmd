@@ -2,15 +2,9 @@
 title: "Complete Project Documentation"
 format:
   revealjs:
-    embed-resources: false
+    embed-resources: true
 editor: visual
 ---
-
-{{< include 01_dat_load.qmd >}}
-
-{{< include 02_dat_clean.qmd >}}
-
-{{< include 03_augment.qmd >}}
 
 ```{r}
 # Loading library
@@ -19,58 +13,17 @@ library(knitr)
 library(rmarkdown)
 ```
 
-```{r}
-#01
-quarto_render("./../R/01_dat_load.qmd")
+{{< include 01_dat_load.qmd >}}
 
-file.rename(from = "./../R/01_dat_load.html",
-            to = "./../results/01_dat_load.html")
+{{< include 02_dat_clean.qmd >}}
 
+{{< include 03_augment.qmd >}}
 
-# 02
-quarto_render("./../R/02_dat_clean.qmd")
+{{< include 04_describe.qmd >}}
 
-file.rename(from = "./../R/02_dat_clean.html",
-            to = "./../results/02_dat_clean.html")
-
-# 03
-quarto_render("./../R/03_augment.qmd")
-
-file.rename(from = "./../R/03_augment.html",
-            to = "./../results/03_augment.html")
-
-# 04
-quarto_render("./../R/04_describe.qmd")
-
-file.rename(from = "./../R/04_describe.html",
-            to = "./../results/04_describe.html")
-
-# 05
-quarto_render("./../R/05_analysis_1.qmd")
-
-file.rename(from = "./../R/05_analysis_1.html",
-            to = "./../results/05_analysis_1.html")
-
-
-
-# Presentation
-quarto_render("./../doc/presentation.qmd")
-file.rename(from = "./../doc/presentation.html",
-            to = "./../doc/presentation.html")
-
-```
+{{< include 05_analysis_1.qmd >}}
 
 ```{r}
-# List of .qmd files to render individually
-qmd_files <- c("01_dat_load.qmd", "02_dat_clean.qmd", "03_augment.qmd",
-               "04_describe.qmd", "05_analysis_1.qmd")
-
-# Render each .qmd to .html and move to 'results' directory
-for (qmd_file in qmd_files) {
-  quarto_render(input = paste0("../R/", qmd_file), execute_params = list(run = "auto"))
-  file.rename(from = paste0(tools::file_path_sans_ext(qmd_file), ".html"),
-              to = paste0("../results/", tools::file_path_sans_ext(qmd_file), ".html"))
-}
 
 # Render the presentation separately to the 'doc' directory
 quarto_render(input = "./../doc/presentation.qmd")

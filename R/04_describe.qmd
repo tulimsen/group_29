@@ -6,7 +6,11 @@ format:
 editor: visual
 ---
 
+# Describing the data
+
 ## Loading necessary packages
+
+In this section, we load essential R packages required for data description and visualization. These packages include `ggplot2`, `readr`, `dplyr`, `purrr`, `gridExtra`, and `reshape2`, which provide tools for data manipulation, plotting, and summarization.
 
 ```{r}
 #| label: 04-01
@@ -21,6 +25,8 @@ library(reshape2)
 
 ## Loading the data
 
+We read the augmented dataset from "03_dat_aug.tsv" for further analysis and description.
+
 ```{r}
 #| label: 04-02
 TCGA_aug <- read_tsv("../data/03_dat_aug.tsv", show_col_types = FALSE)
@@ -28,7 +34,9 @@ TCGA_aug <- read_tsv("../data/03_dat_aug.tsv", show_col_types = FALSE)
 
 ## Describing the data
 
-Summary of basic statistics for TCGA_aug (compare them to TCGA_clean to check for integrity after imputation/augmentation).
+We generate summary statistics for the numeric variables in the "TCGA_aug" dataset. The "summary_numeric" function calculates detailed statistics for each numeric column, including minimum, first quartile, median, mean, third quartile, maximum, and standard deviation. This information is essential for understanding the distribution of numerical data.
+
+We also create a detailed summary for each categorical variable in the dataset. The "summary_categorical" function provides counts and percentages for each category within categorical variables. This helps us understand the distribution of categorical data.
 
 ```{r}
 #| label: 04-03
@@ -85,6 +93,8 @@ categorical_summary <- summary_categorical(TCGA_aug[,-1]) # without the sampleID
 
 ## Visualization of numerical data
 
+We create histograms for each numeric variable to visualize their distributions. These histograms help us understand the spread and shape of numerical data.
+
 ```{r}
 #| label: 04-04
 
@@ -104,6 +114,9 @@ for (var in names(numeric_vars)) {
   ggsave(file_name, plot, width = 8, height = 4)
 }
 ```
+
+\
+We create grouped box plots to compare "age_diagnosis" and "disease_duration_years" across different cancer types. These box plots provide insights into the distribution of these numeric variables within each cancer type
 
 ```{r}
 #| label: 04-05
@@ -132,6 +145,8 @@ ggsave("./../results/04_describe/04_numeric/04_disease_duration_boxplot.png", di
 
 ## Visualization of categorical data
 
+We create bar plots for each categorical variable to visualize the distribution of categories. These bar plots help us understand the distribution of categorical data.
+
 ```{r}
 #| label: 04-06
 
@@ -154,6 +169,9 @@ for (var in names(categorical_vars)) {
   ggsave(file_name, plot, width = 8, height = 4)
 }
 ```
+
+\
+We create grouped bar plots to explore the distribution of cancer types by gender and pathologic stage. These plots provide insights into how cancer types are distributed across different gender and stage categories.
 
 ```{r}
 #| label: 04-07
@@ -178,6 +196,8 @@ ggsave("./../results/04_describe/04_categorical/04_stage_cancertype_barplot.png"
 ```
 
 ## Outliers
+
+We identify and visualize outliers in the numeric variables by creating box plots. Outliers are displayed in red for easy identification.
 
 ```{r}
 #| label: 04-08
@@ -204,6 +224,8 @@ for (var in names(numeric_vars)) {
 ```
 
 ## Correlation analysis and heatmap
+
+We perform correlation analysis for selected numerical variables and create a heatmap to visualize the correlations. The heatmap helps us identify relationships and patterns among numeric variables.
 
 ```{r}
 #| label: 04-09

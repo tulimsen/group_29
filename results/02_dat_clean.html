@@ -1328,24 +1328,6 @@ $ Redaction                           &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA
 </section>
 <section id="missing-values" class="slide level2">
 <h2>Missing values</h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 33 × 2
-   attribute                  missing_count
-   &lt;chr&gt;                              &lt;int&gt;
- 1 residual_tumor                     11160
- 2 Redaction                          11103
- 3 margin_status                       9802
- 4 new_tumor_event_site_other          9725
- 5 new_tumor_event_site                8893
- 6 new_tumor_event_type                8410
- 7 new_tumor_event_dx_days_to          7814
- 8 death_days_to                       7563
- 9 DFI.time                            5639
-10 DFI                                 5629
-# ℹ 23 more rows</code></pre>
-</div>
-</div>
 <h3 id="special-values">Special values</h3>
 <p>In the data values like “[Not Available]”, “[Not Applicable]”, and “[Discrepancy]” are non-NA values but represent missing information in a practical sense and will be treated like categorical values.</p>
 <p>For instance, “[Not Available]” could mean that the data was never collected, while “[Not Applicable]” could mean the question or data point was not relevant for that particular observation. In such cases, they are not simply ‘missing’ but convey a distinct meaning that could be important for analysis.</p>
