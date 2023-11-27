@@ -106,15 +106,15 @@ TCGA |>
 
 ## Exploratory Data Analysis Insights
 
--   Summarize key findings from the EDA.
+- Distribution of Cancer Types by Gender
 
--   Include visualizations like bar charts or scatter plots to illustrate cancer-specific patterns.
+results/04_describe/04_categorical/04_gender_cancertype_barplot.png
 
 ## Survival Analysis Outcomes
 
--   Present the main results from the CoxPH model.
+- Histrogram of Death Days
 
--   Use graphs (like survival curves) to visually represent the survival analysis.
+results/04_describe/04_numeric/04_death_days_to_histogram.png
 
 ## Interpreting the Model
 
