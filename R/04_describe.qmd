@@ -18,6 +18,7 @@ In this section, we load essential R packages required for data description and 
 library(tidyverse)
 library(gridExtra)
 library(reshape2)
+library(dplyr)
 ```
 
 ## Loading the data
@@ -43,7 +44,7 @@ We also create a detailed summary for each categorical variable in the dataset. 
 summary_numeric <- function(df) {
   numeric_vars <- names(select(df, where(is.numeric))) # Get names of numeric variables
   map_dfr(numeric_vars, function(var) {
-    summary_df <- df |> 
+    summary_df <- df %>% 
       summarise(
         Variable = var,
         Min = min(.[[var]], na.rm = TRUE),
