@@ -10,7 +10,7 @@ editor: visual
 
 ## Introduction to TCGA Pan-Cancer Dataset
 
--   Brief introduction to The Cancer Genome Atlas (TCGA)
+-   The Cancer Genome Atlas (TCGA)
 
 -   Significance of the Pan-Cancer dataset in cancer genomics research
 
