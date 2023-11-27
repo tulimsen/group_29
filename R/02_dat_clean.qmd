@@ -13,9 +13,6 @@ editor: visual
 #| message: false
 
 library(tidyverse)
-library(dplyr)
-library(stringr)
-library(tidyr)
 ```
 
 ## Initial exploration
