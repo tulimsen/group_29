@@ -202,10 +202,29 @@ TCGA_aug <- TCGA_aug |>
 :::
 
 ## Exploratory Data Analysis Insights
+::: {style="font-size: 50%;"}
+::: columns
+::: {.column width="35%"}
+- Distribution of Cancer Types by Gender
 
--   Summarize key findings from the EDA.
+::: {style="font-size: 50%;"}
+:::fragment 
 
--   Include visualizations like bar charts or scatter plots to illustrate cancer-specific patterns.
+- BRCA is the most common types between females
+:::
+:::
+
+::: {style="font-size: 50%;"}
+:::fragment 
+- Between men it is HNSC
+:::
+:::
+
+::: {style="font-size: 50%;"}
+:::fragment 
+- Overall women get more cancer than men
+:::
+:::
 
 ## Survival Analysis Outcomes
 ::: {style="font-size: 50%;"}
