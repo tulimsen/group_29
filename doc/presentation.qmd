@@ -11,10 +11,6 @@ editor: visual
 ## Introduction to TCGA Pan-Cancer Dataset
 
 -   The Cancer Genome Atlas (TCGA)
-
-::: {style="font-size: 50%;"}
-::: columns
-::: {.column width="35%"}
 -   Establishing coordinated effort to characterize molecular events in primary cancers 
     -   Collection of clinicopathologic annotation data along with multi-platform molecular profiles of more than 11,000 human tumors across 33 different cancer type
 
@@ -23,9 +19,6 @@ editor: visual
 :::
 
 -   Significance of the Pan-Cancer dataset in cancer genomics research
-::: {style="font-size: 50%;"}
-::: columns
-::: {.column width="35%"}
 -   Pan-cancer dataset allows for simultaneous analysis of genomic data across a diverse range of cancer types  
 
 ::: fragment
