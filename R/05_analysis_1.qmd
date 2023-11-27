@@ -1,12 +1,19 @@
 ---
-title: "05_analysis"
-format: html
+title: "Survival Analysis"
+format:
+  revealjs:
+    embed-resources: true
 editor: visual
 ---
 
+# Survival Analysis
+
 ## Loading packages
 
+In this section, we load necessary R packages for conducting survival analysis. These packages include `tidyverse`, `survival`, `broom`, `forestplot`, and `survminer`. These packages provide functions and tools for data manipulation, survival analysis, model fitting, and visualization.
+
 ```{r}
+library(tidyverse)
 library(survival)
 library(broom)
 library(forestplot)
@@ -15,37 +22,47 @@ library(survminer)
 
 ## Loading the data
 
+We load the augmented dataset from "03_dat_aug.tsv" for conducting survival analysis. The dataset is read and converted to a data frame.
+
 ```{r}
-TCGA_aug <- read_tsv("~/project29_git/data/03_dat_aug.tsv", show_col_types = FALSE)
+TCGA_aug <- read_tsv("./../data/03_dat_aug.tsv", show_col_types = FALSE) %>%
+  as.data.frame()
 ```
 
 ## **Create the Survival Object**
 
-First, ensure that the dataset (**`TCGA_aug`**) has the necessary variables for survival analysis. Typically, we need:
+Before performing survival analysis, we need to ensure that the dataset contains the necessary variables for such analysis:
 
 -   A time-to-event variable: This could be the **`OS.time`** or **`DSS.time`** in the dataset, representing the time until the event (death) occurs.
 
 -   An event indicator: This could be the **`OS`** or **`DSS`** variable, indicating whether the event (death) has occurred (1) or not (0/censored).
 
-Create a **`Surv`** object, which is a special type of object used by the survival package:
+Create a **`Surv`** object, a special data structure used by the survival package, to store this time-to-event and event indicator information.
 
 ```{r}
+
+# Ensure selected variables are treated as factors
+selected_factors <- c("cancer_type", "stage_group", "race", "gender")
+TCGA_aug <- TCGA_aug %>%
+  mutate(across(all_of(selected_factors), as.factor))
+
 # OS.time is the time variable and OS is the event indicator
 surv_obj <- Surv(time = TCGA_aug$OS.time, event = TCGA_aug$OS)
 ```
 
 ## **Fit the cox proportional hazards model**
 
-Fit the model using the **`coxph`** function. Select predictors based on the understanding of the data and previous analyses.
+We fit a Cox proportional hazards model to the data using the `coxph` function. This model examines the impact of various predictors (such as cancer type, age at diagnosis, gender, and race) on survival. The "strata" function is used to account for different cancer types.
 
 ```{r}
-# Fit a CoxPH model with age at diagnosis and cancer type as predictors
-cox_model <- coxph(surv_obj ~ age_diagnosis + cancer_type + gender + stage_group + race, data = TCGA_aug)
+# Fit a Cox proportional hazards model
+cox_model <- coxph(surv_obj ~ strata(cancer_type) + age_diagnosis + 
+                     gender + race, data = TCGA_aug)
 ```
 
 ## Model summary
 
-Inspect the model output to understand the impact of predictors:
+We generate a summary of the Cox proportional hazards model to understand the statistical significance and impact of each predictor variable on survival.
 
 ```{r}
 summary(cox_model)
@@ -53,7 +70,7 @@ summary(cox_model)
 
 ## **Checking Proportional Hazards Assumption**
 
-The Cox model assumes that the ratio of hazards (risk) is constant over time (proportional hazards). This assumption should be checked:
+The Cox proportional hazards model assumes that the hazard ratios remain constant over time (proportional hazards assumption). We use the `cox.zph` function to check this assumption.
 
 ```{r}
 # Checking Proportional Hazards assumption
@@ -63,16 +80,52 @@ cox.zph(cox_model)
 
 ## **Visualizing the Results**
 
-Use the **`ggplot2`** package to visualize the results, such as plotting the estimated survival curves:
+We use the **`ggplot2`** package to visualize the results of the survival analysis. This includes plotting the estimated survival curves based on the fitted model.
 
 ```{r}
-ggsurvplot(
-  survfit(cox_model), 
-  data = TCGA_aug, 
-  pval = TRUE, 
-  conf.int = TRUE,
-  risk.table = TRUE
-)
+# Survival plot
+
+# Use survfit() to generate survival curves for the fitted model
+fit_surv <- survfit(cox_model)
+
+# Plot survival curves without p-values and confidence intervals
+survival_plot <- ggsurvplot(fit_surv, data = TCGA_aug, ggtheme = theme_gray(),
+           xlab = "Time", ylab = "Survival probability",
+           test.for.trend = TRUE, legend = "right")
+
+# Save the plot
+ggsave("./../results/05_analysis_1/05_survival_plot.png", survival_plot$plot, width = 10, height = 6)
+
 ```
 
-## 
+## Hazard Ratio plot
+
+We fit a Cox proportional hazards model without stratification and create a hazard ratio plot to visualize the impact of predictor variables on survival. The `ggforest` function is used for this purpose.
+
+```{r}
+# References for ggforest plot
+TCGA_aug <- TCGA_aug %>%
+  mutate(
+    stage_group = fct_relevel(stage_group, "Stage 1") # stage reference is now stage 1
+)
+
+# Fit a Cox proportional hazards model without stratification
+ph_cox_model <- coxph(Surv(OS.time, OS) ~ cancer_type + age_diagnosis 
+                      + gender + stage_group, data = TCGA_aug)
+
+
+# Create the hazard ratio plot
+hp_plot <- ggforest(ph_cox_model, data = TCGA_aug)
+
+# Save the plot
+ggsave("./../results/05_analysis_1/05_hazardR_plot.png", hp_plot, width = 10, height = 6)
+
+
+# Data frames of hazard ratios
+# Apply broom::tidy to the coxph model ph_cox_model
+# tidied_coxph <- tidy(ph_cox_model)
+
+# The above dataframe provides logtransformed data
+#tidied_coxph$hazard_ratio <- exp(tidied_coxph$estimate)
+
+```

@@ -6,7 +6,11 @@ format:
 editor: visual
 ---
 
-## Importing packages
+# Data Loading
+
+## Importing packages and libraries
+
+In this section, we begin by importing essential R packages that will be used throughout the data loading process.
 
 ```{r}
 #| label: 01-01
@@ -16,7 +20,7 @@ install.packages("tidyverse")
 
 ```
 
-## Import libraries
+We start by installing the "tidyverse" package, which includes a suite of data manipulation and visualization packages.
 
 ```{r}
 #| label: 01-02
@@ -27,9 +31,15 @@ library(readxl)
 
 ```
 
+Next, we load the necessary libraries, including "tidyverse" for data manipulation and "readxl" for reading Excel files.
+
 ## Fetch and load data
 
-Loading the detailed Information about TCGA-CDR and Analysis Results
+This step involves fetching and loading a dataset named "TCGA-CDR" from an online source.
+
+We define the URL of the dataset and the local path where it will be saved. The **`download.file`** function is used to download the dataset and store it in the specified location.
+
+After downloading, we read the dataset into R using the "readxl" package's **`read_excel`** function.
 
 ```{r}
 #| label: 01-03
@@ -44,6 +54,8 @@ TCGA <- read_excel(path)
 ```
 
 ## Save in "data"
+
+Finally, we save the loaded dataset in a tab-separated values (TSV) format for further analysis. The dataset is saved in the "data" directory as "01_dat_load.tsv" for easy access and future use in our analysis.
 
 ```{r}
 #| label: 01-04

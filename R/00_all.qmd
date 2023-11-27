@@ -1,10 +1,17 @@
 ---
-title: "00_all"
+title: "Complete Project Documentation"
 format:
   revealjs:
     embed-resources: true
 editor: visual
 ---
+
+```{r}
+# Loading library
+library(quarto)
+library(knitr)
+library(rmarkdown)
+```
 
 {{< include 01_dat_load.qmd >}}
 
@@ -12,49 +19,13 @@ editor: visual
 
 {{< include 03_augment.qmd >}}
 
-## Rendering results
+{{< include 04_describe.qmd >}}
+
+{{< include 05_analysis_1.qmd >}}
 
 ```{r}
-# Loading library
-library(quarto)
-library(knitr)
-library(rmarkdown)
 
-#01
-quarto_render("./../R/01_dat_load.qmd")
+# Render the presentation separately to the 'doc' directory
+quarto_render(input = "./../doc/presentation.qmd")
 
-file.rename(from = "./../R/01_dat_load.html",
-            to = "./../results/01_dat_load.html")
-
-
-# 02
-quarto_render("./../R/02_dat_clean.qmd")
-
-file.rename(from = "./../R/02_dat_clean.html",
-            to = "./../results/02_dat_clean.html")
-
-# 03
-quarto_render("./../R/03_augment.qmd")
-
-file.rename(from = "./../R/03_augment.html",
-            to = "./../results/03_augment.html")
-
-# 04
-quarto_render("./../R/04_describe.qmd")
-
-file.rename(from = "./../R/04_describe.html",
-            to = "./../results/04_describe.html")
-
-# 05
-quarto_render("./../R/05_analysis_1.qmd")
-
-file.rename(from = "./../R/05_analysis_1.html",
-            to = "./../results/05_analysis_1.html")
-
-
-
-# Presentation
-quarto_render("./../doc/presentation.qmd")
-file.rename(from = "./../doc/presentation.html",
-            to = "./../doc/presentation.html")
 ```

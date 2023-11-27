@@ -4,7 +4,6 @@ subtitle: "TCGA Pan-Cancer Analysis with Emphasis on Survival Analysis"
 # author: "Jasmin Gade Støvlbæk, Monica Nielsen, Sina Ahmadzai, Yusuf Tunc"
 format:
   revealjs:
-    theme: "dark"
     embed-resources: true
 editor: visual
 ---
@@ -53,18 +52,118 @@ editor: visual
 
 ## Interpreting the Model
 
--   Discuss the interpretation of the CoxPH model's results.
+::: {style="font-size: 50%;"}
+::: columns
+::: {.column width="35%"}
+-   Direct comparison of HR across cancer types without stratification
+    -   Understanding relative risks associated with each factor
 
--   Explain the significance of hazard ratios in understanding survival risk.
+::: fragment
+-   GMB stands out - Risk of death nine times greater
+:::
+
+::: fragment
+-   Age - Risk of death increases slightly with each additional year
+:::
+
+::: fragment
+-   Gender - No significant difference based on gender
+:::
+
+::: fragment
+-   Cancer stage - Stage 4 risk of death six times greater
+:::
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="62%"}
+![Proportional Hazard Ratio Plot](./../results/05_analysis_1/05_hazardR_plot.png){fig-align="right"}
+:::
+:::
+:::
 
 ## Implications and Limitations
 
--   Discuss the implications of your findings for cancer research.
+-   Significance for Oncology
 
--   Address any limitations of your study and suggest future research directions.
+::: fragment
+```         
+-   Cox model identifies survival-related factors
+```
+:::
+
+::: fragment
+```         
+-   Guides prognosis and treatment strategies
+```
+:::
+
+::: fragment
+```         
+-   Stresses need for early detection and robust treatments
+```
+:::
+
+::: fragment
+-   Study Limitations
+:::
+
+::: fragment
+```         
+-   Model may omit key influencing factors (lifestyle, socioeconomics)
+```
+:::
+
+::: fragment
+```         
+-   Potential unaccounted variable interactions
+```
+:::
 
 ## Conclusion and Future Outlook
 
--   Recap the main objectives, methods, and findings of your study.
+::: {style="font-size: 50%;"}
+::: columns
+::: {.column width="35%"}
+- Significance for Oncology
 
--   Conclude with remarks on the potential impact of your work and future perspectives in cancer genomics.
+::: fragment
+```         
+  - Employed TCGA Pan-Cancer dataset for survival factor analysis
+  - Identified age and cancer type as critical survival predictors
+```
+:::
+
+::: fragment
+- Contribution to Precision Medicine
+:::
+
+::: fragment
+```         
+  - Aligns with personalized care based on patient-specific data
+  - Promises enhanced predictive accuracy with more genomic information
+```
+:::
+
+::: fragment
+- Future Research Trajectory
+:::
+
+::: fragment
+```         
+  - Aims for advanced models to deepen cancer survival understanding
+  - Sets a foundation for improved patient treatment and survival rates
+```
+:::
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="62%"}
+![Survival Plot](./../results/05_analysis_1/05_survival_plot.png)
+:::
+:::
+:::

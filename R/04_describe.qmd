@@ -6,7 +6,11 @@ format:
 editor: visual
 ---
 
+# Describing the data
+
 ## Loading necessary packages
+
+In this section, we load essential R packages required for data description and visualization. These packages include `ggplot2`, `readr`, `dplyr`, `purrr`, `gridExtra`, and `reshape2`, which provide tools for data manipulation, plotting, and summarization.
 
 ```{r}
 #| label: 04-01
@@ -21,6 +25,8 @@ library(reshape2)
 
 ## Loading the data
 
+We read the augmented dataset from "03_dat_aug.tsv" for further analysis and description.
+
 ```{r}
 #| label: 04-02
 TCGA_aug <- read_tsv("../data/03_dat_aug.tsv", show_col_types = FALSE)
@@ -28,7 +34,9 @@ TCGA_aug <- read_tsv("../data/03_dat_aug.tsv", show_col_types = FALSE)
 
 ## Describing the data
 
-Summary of basic statistics for TCGA_aug (compare them to TCGA_clean to check for integrity after imputation/augmentation).
+We generate summary statistics for the numeric variables in the "TCGA_aug" dataset. The "summary_numeric" function calculates detailed statistics for each numeric column, including minimum, first quartile, median, mean, third quartile, maximum, and standard deviation. This information is essential for understanding the distribution of numerical data.
+
+We also create a detailed summary for each categorical variable in the dataset. The "summary_categorical" function provides counts and percentages for each category within categorical variables. This helps us understand the distribution of categorical data.
 
 ```{r}
 #| label: 04-03
@@ -81,13 +89,11 @@ summary_categorical <- function(df) {
 
 # Apply the function to TCGA_aug
 categorical_summary <- summary_categorical(TCGA_aug[,-1]) # without the sampleID's
-
-
-numeric_summary
-categorical_summary
 ```
 
 ## Visualization of numerical data
+
+We create histograms for each numeric variable to visualize their distributions. These histograms help us understand the spread and shape of numerical data.
 
 ```{r}
 #| label: 04-04
@@ -107,11 +113,10 @@ for (var in names(numeric_vars)) {
   file_name <- paste0("./../results/04_describe/04_numeric/04_", var, "_histogram.png")
   ggsave(file_name, plot, width = 8, height = 4)
 }
-
-
-# Display plots in a grid
-# do.call(grid.arrange, c(num_list[c(1,14,15,3)], ncol = 2))
 ```
+
+\
+We create grouped box plots to compare "age_diagnosis" and "disease_duration_years" across different cancer types. These box plots provide insights into the distribution of these numeric variables within each cancer type
 
 ```{r}
 #| label: 04-05
@@ -119,24 +124,28 @@ for (var in names(numeric_vars)) {
 # Create and save the grouped boxplot of age at diagnosis vs cancer type
 age_diagnosis_plot <- ggplot(TCGA_aug, aes(x = cancer_type, y = age_diagnosis, fill = cancer_type)) +
   geom_boxplot(show.legend = FALSE) +
-  labs(title = "Age at diagnosis across cancer types", x = "Cancer Type", y = "Age at Diagnosis") +
+  labs(title = "Age at diagnosis across cancer types", x = "Cancer Type", 
+       y = "Age at Diagnosis") +
   theme_gray() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggsave("./../results/04_describe/04_numeric/04_age_diagnosis_boxplot.png", age_diagnosis_plot, width = 10, height = 6)
+
 
 # Create and save the grouped boxplot of disease duration vs cancer type
 disease_duration_plot <- ggplot(TCGA_aug, aes(x = cancer_type, y = disease_duration_years, fill = cancer_type)) +
   geom_boxplot(show.legend = FALSE) +
-  labs(title = "Disease duration across cancer types", x = "Cancer Type", y = "Disease Duration in Years") +
+  labs(title = "Disease duration across cancer types", x = "Cancer Type", 
+       y = "Disease Duration in Years") +
   theme_gray() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggsave("./../results/04_describe/04_numeric/04_disease_duration_boxplot.png", disease_duration_plot, width = 10, height = 6)
-
 ```
 
 ## Visualization of categorical data
+
+We create bar plots for each categorical variable to visualize the distribution of categories. These bar plots help us understand the distribution of categorical data.
 
 ```{r}
 #| label: 04-06
@@ -153,17 +162,16 @@ for (var in names(categorical_vars)) {
     geom_bar(fill = "coral", color = "black") +
     labs(title = paste("Bar Plot of", var), x = var, y = "Count") +
     theme_gray(base_size = 9) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) # Rotate x labels for readability
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
   # Save the plot to a file in the 'results' folder
   file_name <- paste0("./../results/04_describe/04_categorical/04_", var, "_barplot.png")
   ggsave(file_name, plot, width = 8, height = 4)
 }
-
-# Display plots in a grid
-# do.call(grid.arrange, c(cat_list[c(1,2,9,15,16)], ncol = 2))
-
 ```
+
+\
+We create grouped bar plots to explore the distribution of cancer types by gender and pathologic stage. These plots provide insights into how cancer types are distributed across different gender and stage categories.
 
 ```{r}
 #| label: 04-07
@@ -189,6 +197,8 @@ ggsave("./../results/04_describe/04_categorical/04_stage_cancertype_barplot.png"
 
 ## Outliers
 
+We identify and visualize outliers in the numeric variables by creating box plots. Outliers are displayed in red for easy identification.
+
 ```{r}
 #| label: 04-08
 
@@ -211,18 +221,16 @@ for (var in names(numeric_vars)) {
   file_name <- paste0("./../results/04_describe/04_outliers/04_", var, "_outliers.png")
   ggsave(file_name, plot, width = 8, height = 4)
 }
-
-
-
-# Display the box plots in a grid
-# grid.arrange(grobs = boxplots, ncol = 2)
-
 ```
 
 ## Correlation analysis and heatmap
 
+We perform correlation analysis for selected numerical variables and create a heatmap to visualize the correlations. The heatmap helps us identify relationships and patterns among numeric variables.
+
 ```{r}
 #| label: 04-09
+
+numerical_vars <- c("age_diagnosis", "death_days_to", "age_at_last_followup_years", "disease_duration_years")
 
 # Calculate correlations for numerical variables
 correlations <- cor(select(TCGA_aug, all_of(numerical_vars)))

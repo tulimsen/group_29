@@ -1,12 +1,16 @@
 ---
-title: "04_augment"
+title: "Augmentation"
 format:
   revealjs:
     embed-resources: true
 editor: visual
 ---
 
+# Augmentation
+
 ## Loading packages and data
+
+In this section, we load the necessary R packages, specifically the "tidyverse," which includes various data manipulation and visualization tools. We also read the cleaned dataset from "02_dat_clean.tsv".
 
 ```{r}
 #| label: 03-01
@@ -25,26 +29,34 @@ TCGA_clean <- read_tsv("../data/02_dat_clean.tsv", show_col_types = FALSE)
 
 ## Adding age at last follow-up and disease duration
 
+We calculate two new variables, "age_at_last_followup_years" and "disease_duration_years," based on information from the cleaned dataset. These variables provide insights into the patients' ages at their last follow-up and the duration of their disease, accounting for vital status (alive or deceased).
+
 ```{r}
 #| label: 03-03
 
-TCGA_aug <- TCGA_clean |> 
+# Calculate age at last follow-up in years
+# Calculate disease duration in years including death
+TCGA_aug <- TCGA_clean %>%
   mutate(
-    # Calculate age at last follow-up in years
-    age_at_last_followup_years = (ifelse(vital_status == "Alive", last_contact_days_to, death_days_to) - birth_days_to) / 365.25,
-    
-    # Calculate disease duration in years including death
-    disease_duration_years = (ifelse(vital_status == "Alive", last_contact_days_to / 365.25, death_days_to / 365.25))
-  ) |> 
+    age_at_last_followup_years = case_when(
+      vital_status == "Alive" ~ (last_contact_days_to - birth_days_to) / 365.25,
+      TRUE ~ (death_days_to - birth_days_to) / 365.25
+    ),
+    disease_duration_years = case_when(
+      vital_status == "Alive" ~ last_contact_days_to / 365.25,
+      TRUE ~ death_days_to / 365.25
+    )
+  ) %>%
   mutate(
     # Round the calculated durations to two decimal places
     age_at_last_followup_years = round(age_at_last_followup_years, 2),
     disease_duration_years = round(disease_duration_years, 2)
   )
-
 ```
 
 ## Adding categorical age groups
+
+We create categorical age groups based on the "age_diagnosis" variable, categorizing patients into age brackets such as "\<18," "18-29," "30-39," and so on.
 
 ```{r}
 #| label: 03-04
@@ -65,6 +77,8 @@ TCGA_aug <- TCGA_aug |>
 ```
 
 ## Adding stage groups
+
+We create broader groupings for pathologic stages, considering the "pathologic_stage" and "clinical_stage" variables. A mapping function, "map_stage," is used to determine the stage groups, taking into account various stage categories and special values such as "\[Discrepancy\]," "\[Not Applicable\]," "\[Not Available\]," and "\[Unknown\]."
 
 ```{r}
 #| label: 03-05
@@ -100,7 +114,26 @@ TCGA_aug <- TCGA_aug |>
   mutate(stage_group = map2_chr(pathologic_stage, clinical_stage, map_stage))
 ```
 
-## Saving data
+## Creating subset of data
+
+A subset of the data is created, focusing on the top 6 cancer types based on their frequency in the dataset. This subset allows for more targeted analysis and visualization.
+
+```{r}
+# Create a subset of your data with the top 6 cancer types
+top_cancer_types <- TCGA_clean %>%
+  count(cancer_type) %>%
+  arrange(desc(n)) %>%
+  slice(1:6) %>%
+  pull(cancer_type)
+
+TCGA_aug <- TCGA_aug %>%
+  filter(cancer_type %in% top_cancer_types)
+
+```
+
+## Saving the data
+
+The augmented dataset is saved as "03_dat_aug.tsv" for further analysis and visualization.
 
 ```{r}
 #| label: 03-06
