@@ -86,11 +86,9 @@ editor: visual
 :::
 :::
 
--   Cox proportional hazards models to gain insights into cancer prognosis
-
 ::: {style="font-size: 50%;"}
-::: fragment
--   The Cox proportional hazard model was used for understanding the factors influencing survival outcomes of patients in the 6 biggest cancer groups we have choosen in our project
+::: fragment 
+- Performing Cox Proportional Hazard Models 
 :::
 :::
 
