@@ -9,62 +9,90 @@ editor: visual
 ---
 
 ## Introduction to TCGA Pan-Cancer Dataset
-
+::: {style="font-size: 50%;"}
+::: fragment
 -   The Cancer Genome Atlas (TCGA)
--   Establishing coordinated effort to characterize molecular events in primary cancers
-    -   Collection of clinicopathologic annotation data along with multi-platform molecular profiles of more than 11,000 human tumors across 33 different cancer type
+:::
+:::
 
+::: {style="font-size: 50%;"}
+::: fragment
+-   Establishing coordinated effort to characterize molecular events in primary cancers
+:::
+:::
+
+::: {style="font-size: 50%;"}
+::: fragment
+-   Collection of clinicopathologic annotation data along with multi-platform molecular profiles of more than 11,000 human tumors across 34 different cancer type
+:::
+:::
+
+::: {style="font-size: 50%;"}
 ::: fragment
 -   Our data is composed of the 6 cancer types with most patients included
 :::
+:::
 
+::: {style="font-size: 50%;"}
+::: fragment
 -   Significance of the Pan-Cancer dataset in cancer genomics research
--   Pan-cancer dataset allows for simultaneous analysis of genomic data across a diverse range of cancer types
+     - Pan-cancer dataset allows for simultaneous analysis of genomic data across a diverse range of cancer types
+:::
+:::
 
+::: {style="font-size: 50%;"}
 ::: fragment
 -   Dataset is crucial for discovering shared molecular features, potential biomarkers and theurapeutic targets
 :::
+:::
 
+::: {style="font-size: 50%;"}
 ::: fragment
 -   Contributing to more effective and personalized cancer treatments
 :::
+:::
 
+::: {style="font-size: 50%;"}
+::: fragment
 -   How this dataset helps in understanding cancer at a molecular level
+:::
+:::
 
+::: {style="font-size: 50%;"}
 ::: fragment
 -  Data includes patient bar code, type of cancer, age at diagnosis, and pathologic tumor stage
 :::
+:::
 
+::: {style="font-size: 50%;"}
 ::: fragment
 -   This dataset facilitates a nuanced understanding of molecular intricacies of cancer
 :::
+:::
 
+::: {style="font-size: 50%;"}
 ::: fragment
 -   Data set helps allowing identification of patterns and shared characteristics among different cancer types\
+:::
 :::
 
 ## Project Aim and Focus
 
 -   To perform an in-depth TCGA Pan-Cancer analysis, focusing on survival analysis
 
+::: {style="font-size: 50%;"}
 ::: fragment
 -   Explore and understand factors influencing survival outcomes within the TCGA dataset
+:::
 :::
 
 -   Cox proportional hazards models to gain insights into cancer prognosis
 
+::: {style="font-size: 50%;"}
 ::: fragment
--   Cox proportional hazard model used in survival analysis to assess impact of covarities
-:::
-
-::: fragment
-<<<<<<< HEAD
 -   The Cox proportional hazard model was used for understanding the factors influencing survival outcomes of patients in the 6 biggest cancer groups we have choosen in our project
-=======
--   The Cox proportional hazard model was used for understanding the factors influencing survival outcomes of patients in the 6 biggest cancer groups we have choosen in our project and we will explain this further in our analysis later on 
->>>>>>> b28033432b64b8d54015abd9e287d48eb4570581
 :::
-
+:::
 
 ## Data Acquisition and Cleaning
 ::: {style="font-size: 50%;"}
