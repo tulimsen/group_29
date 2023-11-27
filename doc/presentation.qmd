@@ -47,7 +47,7 @@ editor: visual
 :::
 
 ::: fragment
--   Data set helps allowing identification of patterns and shared characteristics among different cancer types 
+-   Data set helps allowing identification of patterns and shared characteristics among different cancer types  
 :::
 
 ## Project Aim and Focus
