@@ -32,7 +32,7 @@ editor: visual
 -   How this dataset helps in understanding cancer at a molecular level
 
 ::: fragment
--   Data includes genetic mutations, gene expression profiles, epigenetic changes and other molecular alterations associated with diverse cancers
+-  Data includes patient bar code, type of cancer, age at diagnosis, and pathologic tumor stage
 :::
 
 ::: fragment
