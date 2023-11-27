@@ -65,6 +65,7 @@ editor: visual
 >>>>>>> b28033432b64b8d54015abd9e287d48eb4570581
 :::
 
+
 ## Data Acquisition and Cleaning
 ::: {style="font-size: 50%;"}
 ::: fragment
@@ -74,7 +75,7 @@ editor: visual
 
 ::: {style="font-size: 50%;"}
 ::: fragment
--   Raw data is a 11.160 x 34 sized tibble
+-   Raw data is a 11.160 x 34 sized tibble:
 :::
 :::
 
@@ -97,12 +98,82 @@ TCGA |>
 :::
 :::
 
+::: {style="font-size: 50%;"}
+::: fragment
+-   Initial data exploration: 
+    -   E.g. using slice_head, glimpse and names
+    -   Identify NAs
+:::
+:::
+
+::: {style="font-size: 50%;"}
+::: fragment
+-   Cleaning: 
+    -   Remove index
+    -   Assign non-NA missing information to factors
+    -   Drop columns with >80% missing values
+    -   Impute remaining NAs: Numeric values to median and categorical values to most frequently occuring string
+    -   Rename columns for clarification
+:::
+:::
+
 
 ## Data Transformation and Tools
 
--   Explain the data transformation and augmentation techniques used.
+::: {style="font-size: 50%;"}
+::: fragment
+-   Mutate two new columns, by calculating: 
+    -   "age_at_last_followup_years"
+    -   "disease_duration_years" 
+:::
+:::
 
--   Highlight the use of Tidyverse in RStudio for data analysis.
+::: {style="font-size: 50%;"}
+::: fragment
+-   Mutate a new column "age_group_diagnosis" where patients are divided into age categories
+:::
+:::
+
+::: {style="font-size: 50%;"}
+::: fragment
+-   Define function to assign new variable "stage_group" based om: 
+    -   "clinical_stage"
+    -   "pathological_stage" 
+:::
+:::
+
+::: {style="font-size: 50%;"}
+::: fragment
+-   Create subset of the data from the top 6 cancer types:
+:::
+:::
+
+
+::: {style="font-size: 50%;"}
+::: fragment
+```{r}
+#| label: show subsetting
+#| eval: false
+#| echo: true
+
+
+top_cancer_types <- TCGA_clean |> 
+  count(cancer_type) |> 
+  arrange(desc(n)) |> 
+  slice(1:6) |> 
+  pull(cancer_type)
+
+TCGA_aug <- TCGA_aug |> 
+  filter(cancer_type %in% top_cancer_types)
+```
+:::
+:::
+
+::: {style="font-size: 50%;"}
+::: fragment
+-   ... Leaving us with a new tibble TCGA_aug sized 3.893 x 33 ready for description and analysis
+:::
+:::
 
 ## Exploratory Data Analysis Insights
 
