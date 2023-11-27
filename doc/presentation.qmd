@@ -58,7 +58,7 @@ editor: visual
 :::
 
 ::: fragment
--   The Cox proportional hazard model was used for understanding the factors influencing survival outcomes of patients in the 6 biggest cancer groups we have choosen in our project 
+-   The Cox proportional hazard model was used for understanding the factors influencing survival outcomes of patients in the 6 biggest cancer groups we have choosen in our project and we will explain this further in our analysis later on 
 :::
 
 ## Data Acquisition and Cleaning
