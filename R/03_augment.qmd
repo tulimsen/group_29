@@ -36,7 +36,7 @@ We calculate two new variables, "age_at_last_followup_years" and "disease_durati
 
 # Calculate age at last follow-up in years
 # Calculate disease duration in years including death
-TCGA_aug <- TCGA_clean %>%
+TCGA_aug <- TCGA_clean |> 
   mutate(
     age_at_last_followup_years = case_when(
       vital_status == "Alive" ~ (last_contact_days_to - birth_days_to) / 365.25,
@@ -46,7 +46,7 @@ TCGA_aug <- TCGA_clean %>%
       vital_status == "Alive" ~ last_contact_days_to / 365.25,
       TRUE ~ death_days_to / 365.25
     )
-  ) %>%
+  ) |> 
   mutate(
     # Round the calculated durations to two decimal places
     age_at_last_followup_years = round(age_at_last_followup_years, 2),
@@ -119,14 +119,16 @@ TCGA_aug <- TCGA_aug |>
 A subset of the data is created, focusing on the top 6 cancer types based on their frequency in the dataset. This subset allows for more targeted analysis and visualization.
 
 ```{r}
+#| label: 03-06
+#| 
 # Create a subset of your data with the top 6 cancer types
-top_cancer_types <- TCGA_clean %>%
-  count(cancer_type) %>%
-  arrange(desc(n)) %>%
-  slice(1:6) %>%
+top_cancer_types <- TCGA_clean |> 
+  count(cancer_type) |> 
+  arrange(desc(n)) |> 
+  slice(1:6) |> 
   pull(cancer_type)
 
-TCGA_aug <- TCGA_aug %>%
+TCGA_aug <- TCGA_aug |> 
   filter(cancer_type %in% top_cancer_types)
 
 ```
@@ -136,7 +138,7 @@ TCGA_aug <- TCGA_aug %>%
 The augmented dataset is saved as "03_dat_aug.tsv" for further analysis and visualization.
 
 ```{r}
-#| label: 03-06
+#| label: 03-07
 
 write_tsv(TCGA_aug, "../data/03_dat_aug.tsv")
 ```
