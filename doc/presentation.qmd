@@ -58,18 +58,45 @@ editor: visual
 :::
 
 ::: fragment
+<<<<<<< HEAD
 -   The Cox proportional hazard model was used for understanding the factors influencing survival outcomes of patients in the 6 biggest cancer groups we have choosen in our project
+=======
+-   The Cox proportional hazard model was used for understanding the factors influencing survival outcomes of patients in the 6 biggest cancer groups we have choosen in our project and we will explain this further in our analysis later on 
+>>>>>>> b28033432b64b8d54015abd9e287d48eb4570581
 :::
 
 ## Data Acquisition and Cleaning
+::: {style="font-size: 50%;"}
+::: fragment
+-   Data retrieved and loaded using read_excel()
+:::
+:::
 
--   Discuss sources of the TCGA dataset.
+::: {style="font-size: 50%;"}
+::: fragment
+-   Raw data is a 11.160 x 34 sized tibble
+:::
+:::
 
--   Outline the data cleaning process: handling missing values, standardizing formats, etc.
+::: {style="font-size: 30%;"}
+::: fragment
+```{r}
+#| label: load data to tibble
+#| message: false
+#| warning: false
 
-    -   drop values
 
-    -   Impute values
+library(tidyverse)
+TCGA <- read_tsv("./../data/01_dat_load.tsv")
+
+TCGA |> 
+  slice_head(n=3) |> 
+  knitr::kable()
+
+```
+:::
+:::
+
 
 ## Data Transformation and Tools
 
