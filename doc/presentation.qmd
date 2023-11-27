@@ -10,17 +10,56 @@ editor: visual
 
 ## Introduction to TCGA Pan-Cancer Dataset
 
--   Brief introduction to The Cancer Genome Atlas (TCGA)
+-   The Cancer Genome Atlas (TCGA)
+-   Establishing coordinated effort to characterize molecular events in primary cancers 
+    -   Collection of clinicopathologic annotation data along with multi-platform molecular profiles of more than 11,000 human tumors across 33 different cancer type
+
+::: fragment
+-   Our data is composed of the 6 cancer types with most patients included 
+:::
 
 -   Significance of the Pan-Cancer dataset in cancer genomics research
+-   Pan-cancer dataset allows for simultaneous analysis of genomic data across a diverse range of cancer types  
+
+::: fragment
+-   Dataset is crucial for discovering shared molecular features, potential biomarkers and theurapeutic targets 
+:::
+
+::: fragment
+-   Contributing to more effective and personalized cancer treatments
+:::
 
 -   How this dataset helps in understanding cancer at a molecular level
 
+::: fragment
+-   Data includes genetic mutations, gene expression profiles, epigenetic changes and other molecular alterations associated with diverse cancers
+:::
+
+::: fragment
+-   This dataset facilitates a nuanced understanding of molecular intricacies of cancer 
+:::
+
+::: fragment
+-   Data set helps allowing identification of patterns and shared characteristics among different cancer types  
+:::
+
 ## Project Aim and Focus
 
--   State the project's aim: "To perform an in-depth TCGA Pan-Cancer analysis, focusing on survival analysis."
+-   To perform an in-depth TCGA Pan-Cancer analysis, focusing on survival analysis
 
--   Mention the use of Cox proportional hazards models to gain insights into cancer prognosis.
+::: fragment
+-   Explore and understand factors influencing survival outcomes within the TCGA dataset
+:::
+
+-  Cox proportional hazards models to gain insights into cancer prognosis
+
+::: fragment
+-   Cox proportional hazard model used in survival analysis to assess impact of covarities
+:::
+
+::: fragment
+-   The Cox proportional hazard model was used for understanding the factors influencing survival outcomes of patients in the 6 biggest cancer groups we have choosen in our project 
+:::
 
 ## Data Acquisition and Cleaning
 

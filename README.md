@@ -8,6 +8,6 @@ Presentation link: [R for Bio Data Science, group 29](https://raw.githack.com/rf
 
 -   Monica Nielsen, s223448 - github: monicanielsen
 
--   Sina Ahmadzai, s190482 - github:s190482
+-   Sina Ahmadzai, s190482 - github: s190482
 
--   Yusuf Tunc, s233898 - github:tulimsen
+-   Yusuf Tunc, s233898 - github: tulimsen

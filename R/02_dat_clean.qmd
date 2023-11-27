@@ -17,9 +17,6 @@ In this section, we load essential R libraries that are required for data cleani
 #| message: false
 
 library(tidyverse)
-library(dplyr)
-library(stringr)
-library(tidyr)
 ```
 
 ## Initial exploration

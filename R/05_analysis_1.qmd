@@ -13,6 +13,8 @@ editor: visual
 In this section, we load necessary R packages for conducting survival analysis. These packages include `tidyverse`, `survival`, `broom`, `forestplot`, and `survminer`. These packages provide functions and tools for data manipulation, survival analysis, model fitting, and visualization.
 
 ```{r}
+#| label: 05-0
+
 library(tidyverse)
 library(survival)
 library(broom)
@@ -25,7 +27,9 @@ library(survminer)
 We load the augmented dataset from "03_dat_aug.tsv" for conducting survival analysis. The dataset is read and converted to a data frame.
 
 ```{r}
-TCGA_aug <- read_tsv("./../data/03_dat_aug.tsv", show_col_types = FALSE) %>%
+#| label: 05-02
+
+TCGA_aug <- read_tsv("./../data/03_dat_aug.tsv", show_col_types = FALSE) |> 
   as.data.frame()
 ```
 
@@ -40,6 +44,7 @@ Before performing survival analysis, we need to ensure that the dataset contains
 Create a **`Surv`** object, a special data structure used by the survival package, to store this time-to-event and event indicator information.
 
 ```{r}
+#| label: 05-03
 
 # Ensure selected variables are treated as factors
 selected_factors <- c("cancer_type", "stage_group", "race", "gender")
@@ -55,6 +60,8 @@ surv_obj <- Surv(time = TCGA_aug$OS.time, event = TCGA_aug$OS)
 We fit a Cox proportional hazards model to the data using the `coxph` function. This model examines the impact of various predictors (such as cancer type, age at diagnosis, gender, and race) on survival. The "strata" function is used to account for different cancer types.
 
 ```{r}
+#| label: 05-04
+
 # Fit a Cox proportional hazards model
 cox_model <- coxph(surv_obj ~ strata(cancer_type) + age_diagnosis + 
                      gender + race, data = TCGA_aug)
@@ -65,6 +72,8 @@ cox_model <- coxph(surv_obj ~ strata(cancer_type) + age_diagnosis +
 We generate a summary of the Cox proportional hazards model to understand the statistical significance and impact of each predictor variable on survival.
 
 ```{r}
+#| label: 05-05
+
 summary(cox_model)
 ```
 
@@ -73,6 +82,8 @@ summary(cox_model)
 The Cox proportional hazards model assumes that the hazard ratios remain constant over time (proportional hazards assumption). We use the `cox.zph` function to check this assumption.
 
 ```{r}
+#| label: 05-06
+ 
 # Checking Proportional Hazards assumption
 cox.zph(cox_model)
 
@@ -83,6 +94,8 @@ cox.zph(cox_model)
 We use the **`ggplot2`** package to visualize the results of the survival analysis. This includes plotting the estimated survival curves based on the fitted model.
 
 ```{r}
+#| label: 05-07
+
 # Survival plot
 
 # Use survfit() to generate survival curves for the fitted model
@@ -103,8 +116,10 @@ ggsave("./../results/05_analysis_1/05_survival_plot.png", survival_plot$plot, wi
 We fit a Cox proportional hazards model without stratification and create a hazard ratio plot to visualize the impact of predictor variables on survival. The `ggforest` function is used for this purpose.
 
 ```{r}
+#| label: 05-08
+
 # References for ggforest plot
-TCGA_aug <- TCGA_aug %>%
+TCGA_aug <- TCGA_aug |> 
   mutate(
     stage_group = fct_relevel(stage_group, "Stage 1") # stage reference is now stage 1
 )

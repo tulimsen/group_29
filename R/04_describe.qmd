@@ -10,15 +10,12 @@ editor: visual
 
 ## Loading necessary packages
 
-In this section, we load essential R packages required for data description and visualization. These packages include `ggplot2`, `readr`, `dplyr`, `purrr`, `gridExtra`, and `reshape2`, which provide tools for data manipulation, plotting, and summarization.
+In this section, we load essential R packages required for data description and visualization. These packages include the tidyverse packages `ggplot2`, `readr`, `dplyr`, `purrr`, as well as `gridExtra`, and `reshape2`, which together provide tools for data manipulation, plotting, and summarization.
 
 ```{r}
 #| label: 04-01
 #| message: false
-library(ggplot2)
-library(readr)
-library(dplyr)
-library(purrr)
+library(tidyverse)
 library(gridExtra)
 library(reshape2)
 ```
@@ -46,7 +43,7 @@ We also create a detailed summary for each categorical variable in the dataset. 
 summary_numeric <- function(df) {
   numeric_vars <- names(select(df, where(is.numeric))) # Get names of numeric variables
   map_dfr(numeric_vars, function(var) {
-    summary_df <- df %>%
+    summary_df <- df |> 
       summarise(
         Variable = var,
         Min = min(.[[var]], na.rm = TRUE),
@@ -73,9 +70,9 @@ summary_categorical <- function(df) {
   
   # Function to summarize a single categorical variable
   summarize_variable <- function(var_name) {
-    var_table <- df %>%
-      count(!!sym(var_name)) %>%
-      mutate(Percentage = n / sum(n) * 100) %>%
+    var_table <- df |> 
+      count(!!sym(var_name)) |> 
+      mutate(Percentage = n / sum(n) * 100) |> 
       rename(Level = !!sym(var_name))
 
     # Add variable name as a column for identification
@@ -100,7 +97,8 @@ We create histograms for each numeric variable to visualize their distributions.
 
 num_list <- list()
 # Loop through numeric variables and create plots
-numeric_vars <- TCGA_aug[,-10] %>% select(where(is.numeric))
+numeric_vars <- TCGA_aug[,-10] |> 
+  select(where(is.numeric))
 
 for (var in names(numeric_vars)) {
   plot <-
@@ -154,7 +152,8 @@ We create bar plots for each categorical variable to visualize the distribution 
 cat_list <- list()
 
 # Loop through categorical variables and create bar plots
-categorical_vars <- TCGA_aug[,-1] %>% select(where(is.character))
+categorical_vars <- TCGA_aug[,-1] |>
+  select(where(is.character))
 
 for (var in names(categorical_vars)) {
   plot <-
@@ -207,7 +206,8 @@ We identify and visualize outliers in the numeric variables by creating box plot
 
 
 # Loop through numeric variables and create box plots
-numeric_vars <- TCGA_aug[,-10] %>% select(where(is.numeric))
+numeric_vars <- TCGA_aug[,-10] |> 
+  select(where(is.numeric))
 
 for (var in names(numeric_vars)) {
   plot <-

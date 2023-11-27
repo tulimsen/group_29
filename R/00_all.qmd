@@ -7,6 +7,8 @@ editor: visual
 ---
 
 ```{r}
+#| label: 00-01
+
 # Loading library
 library(quarto)
 library(knitr)
@@ -24,6 +26,7 @@ library(rmarkdown)
 {{< include 05_analysis_1.qmd >}}
 
 ```{r}
+#| label: 00-02
 
 # Render the presentation separately to the 'doc' directory
 quarto_render(input = "./../doc/presentation.qmd")
