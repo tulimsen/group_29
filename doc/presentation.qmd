@@ -208,10 +208,33 @@ TCGA_aug <- TCGA_aug |>
 -   Include visualizations like bar charts or scatter plots to illustrate cancer-specific patterns.
 
 ## Survival Analysis Outcomes
+::: {style="font-size: 50%;"}
+::: columns
+::: {.column width="35%"}
+-  Main results from the CoxPH model
 
--   Present the main results from the CoxPH model.
+::: {style="font-size: 50%;"}
+:::fragment 
+- We fitted a CoxPH model to examine impact of various predictors 
+:::
+:::
 
--   Use graphs (like survival curves) to visually represent the survival analysis.
+::: {style="font-size: 50%;"}
+:::fragment 
+- Our predictors include, cancer type, age at diagnosis, gender and race on survival
+:::
+:::
+
+::: {style="font-size: 50%;"}
+:::fragment 
+- We also performed strata, which is the function used to account for different cancer types 
+:::
+:::
+
+::: {.column width="62%"}
+![Survival Plot](./../results/05_analysis_1/05_survival_plot.png)
+:::
+
 
 ## Interpreting the Model
 
