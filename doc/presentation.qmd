@@ -8,7 +8,7 @@ format:
 editor: visual
 ---
 
-## Introduction to TCGA Pan-Cancer Dataset 
+## Introduction to TCGA Pan-Cancer Dataset  
 ::: {style="font-size: 50%;"}
 ::: fragment
 -   The Cancer Genome Atlas (TCGA)
