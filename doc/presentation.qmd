@@ -127,7 +127,7 @@ editor: visual
 ::: {style="font-size: 50%;"}
 ::: columns
 ::: {.column width="35%"}
-- Significance for Oncology
+-   Significance for Oncology
 
 ::: fragment
 ```         
@@ -137,7 +137,7 @@ editor: visual
 :::
 
 ::: fragment
-- Contribution to Precision Medicine
+-   Contribution to Precision Medicine
 :::
 
 ::: fragment
@@ -148,7 +148,7 @@ editor: visual
 :::
 
 ::: fragment
-- Future Research Trajectory
+-   Future Research Trajectory
 :::
 
 ::: fragment
