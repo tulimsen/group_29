@@ -23,7 +23,7 @@ library(tidyverse)
 
 ### Raw data
 
-We begin by reading the previously loaded raw data from "01_dat_load.tsv" and inspecting its structure using the **`glimpse`**, **`head`**, **`summary`**, and **`colnames`** functions. This initial exploration helps us understand the dataset's dimensions and its variable names.
+We begin by reading the previously loaded raw data from "01_dat_load.tsv" and inspecting its structure using the **`glimpse`**, **`slice_head`**, **`names`**, and **`summary`** functions. This initial exploration helps us understand the dataset's dimensions and its variable names.
 
 ```{r}
 #| label: 02-02
@@ -35,9 +35,14 @@ glimpse(TCGA)
 ```{r}
 #| label: 02-03
 
-head(TCGA)
-summary(TCGA)
-colnames(TCGA)
+TCGA |> 
+  slice_head(n=10)
+TCGA |> 
+  names()
+TCGA |> 
+  summary()
+
+
 ```
 
 ```{r}
